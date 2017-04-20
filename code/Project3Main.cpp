@@ -41,30 +41,19 @@ int main(int argc, char * argv[]) {
   if (access(query_file, F_OK) == -1) {cerr << "ERROR: Can't open file " << query_file << endl ; return EXIT_FAILURE;}
 
   // Variables for main
-<<<<<<< HEAD
-  // TODO: hit a seg_fault where this wasn't big enough, need to preprocess and find out how big it needs to be
   int extra_bases = 25000;
   int num_queries = 961710;
   int num_mers_per_query = 100;
   char * subject_data = new char[num_bases + extra_bases];
   char * query_data = new char[num_queries * num_mers_per_query + 1];
-=======
-  int extra_bases = 25000;
-  char * subject_data = new char[num_bases + extra_bases];
->>>>>>> 206667ad95064096033ef7b28b4d1ada34096e2b
 
   // Read the input data
   FileReader fr;
   fr.ReadSubjects(subject_file, subject_data, num_bases);
-<<<<<<< HEAD
   fr.ReadQueries(query_file, query_data, num_queries);
 
   // Successful exit with cleanup
   delete[] subject_data;
+  delete[] query_data;
   return(EXIT_SUCCESS);
-=======
-
-  // Successful exit with cleanup
-  delete[] subject_data;
->>>>>>> 206667ad95064096033ef7b28b4d1ada34096e2b
 }

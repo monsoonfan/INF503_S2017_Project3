@@ -55,4 +55,5 @@ int main(int argc, char * argv[]) {
 
   // Successful exit with cleanup
   delete[] subject_data;
+  return(EXIT_SUCCESS);
 }

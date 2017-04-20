@@ -155,7 +155,7 @@ int FileReader::ReadQueries(char * file, char * values, int num_queries_to_read)
   cout << "Reading " << num_queries_to_read << " queries of FASTA file ..." << file << endl ;
 
   // Variables and info messages
-  bool dbg = (DEBUG && 0);
+  bool dbg = (DEBUG && 1);
   char c;
   int char_count = 0;
   int line_count = 0;

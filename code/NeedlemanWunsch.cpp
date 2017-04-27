@@ -228,7 +228,7 @@ void NeedlemanWunsch::get_alignment(char *&s1, char *&s2, char *&l)
 {
 	for(int i=0;i<final_length;i++){
 		s1[i] = alignment_s[i];
-		s1[i] = alignment_q[i];
+		s2[i] = alignment_q[i];
 		l[i] = signs[i];
 	}
 }

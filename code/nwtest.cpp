@@ -3,7 +3,7 @@
 #include <string>
 #include <cstdlib>
 
-#include "NeedlemanWunsch.cpp"
+#include "NeedlemanWunsch.h"
 using namespace std;
 
 int main()

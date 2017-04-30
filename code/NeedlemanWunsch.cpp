@@ -2,48 +2,15 @@
 #include <cstdio>
 #include <cstdlib>
 
-//#include "NeedlemanWunsch.h"
+#include "NeedlemanWunsch.h"
 using namespace std;
-class NeedlemanWunsch
-{
-private:
 
-		char * query;
-		char * subject;
-		int length_query;
-		int length_subject;
-		char * alignment_q;
-		char * alignment_s;
-		char * signs;
-		
-		
-		int ** D_matrix;
-		char ** trace_matrix;
-		int scores[5][5] = {
+const int NeedlemanWunsch::scores[5][5] = {
 			{0,-3,-3,-3,-3},
 			{-3,2,-1,-1,-1},
 			{-3,-1,2,-1,-1},
 			{-3,-1,-1,2,-1},
 			{-3,-1,-1,-1,2}
-		};
-		
-		
-		int radix(char);
-		//void find_best(int&,char&,int[3]);
-		void trace_back();
-		
-public:
-	NeedlemanWunsch(char * query, int length_query,char * subject,int length_subject);
-	~NeedlemanWunsch();
-	
-	int final_score;
-	int final_length;
-	
-	
-	void align();
-	//int get_score();
-	void get_alignment(char *&, char *&,char *&);
-	
 };
 
 NeedlemanWunsch::NeedlemanWunsch(char * query, int length_query,char * subject,int length_subject)

@@ -154,13 +154,17 @@ void HashMap::Initialize(char * file) {
 		 }
 
 		if (c != ' '){
-			infile.get(taxa, buffer_size, ':');
+			taxa[0] = c;
+			infile.get(&taxa[1], buffer_size-1, ':');
 			infile.get(c);
 			if (c != ':') {
 				 cout << "ERROR: bad data on line " << line_count << endl;
 				break;
 			}
+			infile.get(c);
 			infile.get(num_seeds, buffer_size, '\n'); 
+			counter ++;
+			if(counter<5) cout<<atoi(taxa)<<": "<<atoi(num_seeds)<<endl;
 		}
 		  
 		addTax(atoi(taxa),atoi(num_seeds));

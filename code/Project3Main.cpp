@@ -6,6 +6,7 @@
 #include <iostream>
 #include "FileReader.h"
 #include "HashMap.h"
+#include "NeedlemanWunsch.h"
 
 using namespace std;
 
@@ -50,9 +51,18 @@ int main(int argc, char * argv[]) {
   char * query_data = new char[num_queries * num_mers_per_query + 1];
 
   // Read the input data
+  //start tesing hash table
   HashMap *Map = new HashMap;
   Map->Initialize(statistic);
-  Map->addTax(449400,10);// just for test, it's the first taxID we have 
+  //Map->addTax(449400,10);// just for test, it's the first taxID we have 
+  //Map->addTax(1714570,4);
+  Map->addSeed(449400,"ACGGTAGCTGCTGAGT");
+  Map->addSeed(31600,"ACGGTAGCTGCTGAGT");
+  cout<<Map->get(449400,0)<<endl;
+  cout<<Map->get(31600,0)<<endl;
+  //end 
+  
+  
   FileReader fr;
   fr.ReadSubjects(subject_file, subject_data, num_bases);
   fr.ReadQueries(query_file, query_data, num_queries);

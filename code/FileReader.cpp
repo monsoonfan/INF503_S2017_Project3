@@ -20,6 +20,42 @@ FileReader::~FileReader()
 }
 
 /*
+--- PreProcessSubjects ---
+- 4/28/17
+- rmr5
+-----------------
+
+Method to process a file of genomic sequences (having GID and TaxID) and report the following:
+  - the number of GID's we have per TaxID. This is for hash table sizing.
+  - actually, what we need are number of TaxIDs and number of words per TaxID
+    - probably need some sort of modulo 16 based algo to help with this
+
+
+  - METHODOLOGY
+  - pre-process the fasta to find out how many words will be stored for each TaxID
+  - In pre-process mode, all data sctructures are initialized to NULL values
+
+  - Then, after DS are initialized, we can read the file again and store each word
+    into it's TaxID's hash.
+  - Don't need to string all of the sequences together in order to know about start/stop
+    Since processing the file from 1st to last char (effectively strung together), we just
+    need to store the start/stop for each word in the TaxID
+
+    This will have the effect of saving us the "string" data structure
+
+  - Process is basically the same for storing query seeds, right?
+
+needs:
+ array of 16 words (maybe it's a stack, and each time I pop one off to store  on TaxID>word
+ * hold on here, perhaps the key of the word is it's start value?
+ array of each word's start
+ 
+
+*/
+
+
+
+/*
 --- ReadSubjects ---
 - 4/13/17
 - rmr5
@@ -48,8 +84,13 @@ int FileReader::ReadSubjects(char * file, char * values, int num_bases_to_read)
   int id_buffer_size = 100;
   char * gi_id = new char[id_buffer_size];
   char * tax_id = new char[id_buffer_size];
+
   int start_index = 0;
   int end_index = 0;
+
+  int word_size = 16;
+  //Word word;
+  int num_words = 0; // per taxID
   
   ifstream infile(file);
   
@@ -70,6 +111,7 @@ int FileReader::ReadSubjects(char * file, char * values, int num_bases_to_read)
       if (c == '\n') {
 	if (dbg) cout << c;
 	line_count++;
+	num_words = 0;
 	continue;
       }
 

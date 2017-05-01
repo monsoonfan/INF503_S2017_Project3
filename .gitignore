@@ -1,6 +1,8 @@
 docs/~$oject3.docx
 *~
 code/Project3
-code/Project3.exe
+code/*.exe
+code/*.tmp
 */*log
 expirement/*
+*/*stackdump

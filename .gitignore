@@ -3,6 +3,7 @@ docs/~$oject3.docx
 code/Project3
 code/*.exe
 code/*.tmp
+code/TableSize.txt
 */*log
 expirement/*
 */*stackdump

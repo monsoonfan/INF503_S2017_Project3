@@ -56,17 +56,22 @@ int main(int argc, char * argv[]) {
   Map->Initialize(statistic);
   //Map->addTax(449400,10);// just for test, it's the first taxID we have 
   //Map->addTax(1714570,4);
-  
+  cout<<"starting adding seeds"<<endl;
   // Map->addLocation(<seed_num>,"SEED",<int: start_loc>)
-  Map->addSeed(449400,"ACGGTAGCTGCTGAGT",0);
-  Map->addSeed(31600,"ACGGTAGCTGCTGAGT",0);
+  Map->addSeed(449400,"ACGGTAGCTGCTGAGT",8);
+  Map->addSeed(31600,"ACGGTAGCTGCTGAGT",5);
+  
+  cout<<"end adding seeds"<<endl;
+  node *head = new node;
+  Map->get(31600,"ACGGTAGCTGCTGAGT",head);
+  //printList(head);
   //cout<<Map->get(449400,0)<<endl;
   //cout<<Map->get(31600,0)<<endl;
   //end 
   
   
   FileReader fr;
-  fr.PreProcessSubjects(subject_file, subject_data, num_bases);
+  //fr.PreProcessSubjects(subject_file, subject_data, num_bases);
   fr.ReadSubjects(subject_file, subject_data, num_bases);
   fr.ReadQueries(query_file, query_data, num_queries);
 

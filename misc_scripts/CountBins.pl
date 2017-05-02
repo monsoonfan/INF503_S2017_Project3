@@ -63,7 +63,7 @@ printBoth("   TaxID = $TI_size\n", LOG);
 # Report the number of words per TaxID
 foreach my $tkey (keys %TaxID_V) {
     $taxID_word_count = $TaxID_V{$tkey}{char_count} - ($TaxID_V{$tkey}{num_genomes} * 16);
-    print "     $tkey($TaxID_V{$tkey}{num_genomes}): $taxID_word_count\n";
+    print LOG "     $tkey($TaxID_V{$tkey}{num_genomes}): $taxID_word_count\n";
 }    
 
 # Count the Bacteria info and report
@@ -102,7 +102,7 @@ printBoth("   TaxID = $TI_B_size\n", LOG);
 # Report the number of GI's per TaxID
 foreach my $tkey (keys %TaxID_B) {
     $taxID_word_count = $TaxID_B{$tkey}{char_count} - ($TaxID_B{$tkey}{num_genomes} * 16);
-    print "     $tkey($TaxID_B{$tkey}{num_genomes}): $taxID_word_count\n";
+    print LOG "     $tkey($TaxID_B{$tkey}{num_genomes}): $taxID_word_count\n";
 }    
 
 close (VF, BF, LOG);

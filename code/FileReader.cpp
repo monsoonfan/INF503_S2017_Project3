@@ -233,7 +233,10 @@ int FileReader::ReadQueries(char * file, char * values, int num_queries_to_read)
 
       // Grab the header - need to do this before non-ACGT swap
       if (c == '>') {
+	seed.reset();
+
 	infile.get(read_id, id_buffer_size, '\n');  // get the TaxID
+
 	if (dbg) cout << "Header: " << read_id << ", " << endl;
 	infile.get(c);                             // advance past the \n
 	if (c != '\n') {
@@ -249,7 +252,6 @@ int FileReader::ReadQueries(char * file, char * values, int num_queries_to_read)
       // this works because the header grab advances past it's newline
       if (c == '\n') {
 	if (dbg) cout << c;
-	// TODO: store here
 	read_count++;
 	line_count++;
 	continue;

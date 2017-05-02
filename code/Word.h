@@ -12,7 +12,7 @@ class Word
   bool is_full;
   //char * array = new char[16];
   char array[word_size];
-  bool DEBUG = true;
+  static const int debug = 0; // control debug output at Word.cpp level
   
   // Methods
   Word();

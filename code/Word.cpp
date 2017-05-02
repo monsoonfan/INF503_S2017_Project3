@@ -10,7 +10,7 @@ Custom data structure for the Project3 preprocessor
 #include "stdafx.h"
 
 #include "Word.h"
-#include<iostream>
+#include <iostream>
 #include <string>
 
 using namespace std;
@@ -57,8 +57,11 @@ This method manages head, write will only manage the characters in relation to h
 */
 int Word::store(char c)
 {
+  // Variables
+  int write_val = 0;
+
 	// First step is to write out the current buffer
-	write(word_size);
+  write_val = write(word_size);
 
 	// Second is to store the new char at the head
 	array[head] = c;
@@ -73,7 +76,7 @@ int Word::store(char c)
 		head++;
 	}
 
-	return count;
+	return write_val;
 }
 
 
@@ -93,10 +96,10 @@ unsigned int Word::write(int s)
 
 	// Write only if the word is full
 	if (is_full) {
-		cout << "DBG: write from head: " << index << endl;
+	  if (DEBUG && debug) cout << "DBG: write from head: " << index << endl;
 		// Write word_size chars starting from head
 		for (int i = 0; i < word_size; i++) {
-			if (DEBUG) cout << array[index];
+			if (DEBUG && debug) cout << array[index];
 			// TODO: how to write the values, I'm thinking that a pointer to 
 			//       hash element where this will go gets passed in and we write
 			//       one char at a time, incrementing the pointer with ++
@@ -107,7 +110,7 @@ unsigned int Word::write(int s)
 				index++;
 			}
 		}
-		cout << endl;
+		if (DEBUG && debug) cout << endl;
 		return 1;
 	}
 	else {
@@ -154,6 +157,7 @@ void Word::reset()
 Used for testing of the Word class, basically a unit test
 
 */
+/*
 int main()
 {
 	cout << "Testing Word class..." << endl;
@@ -181,4 +185,4 @@ int main()
 	cout << "Done" << endl;
     return 0;
 }
-
+*/

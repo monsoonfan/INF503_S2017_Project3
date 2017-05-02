@@ -263,7 +263,7 @@ int FileReader::ReadQueries(char * file, char * values, int num_queries_to_read)
 
       // Store a word here after reading a char, this will store only if the word is full
       num_seeds = num_seeds + seed.store(c);
-      cout << num_words << endl;;
+      //cout << num_seeds << endl;;
 
       // Fail safe in case of broken file
       if (line_count > num_queries_to_read * 3) {

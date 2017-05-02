@@ -62,7 +62,6 @@ unsigned int MurmurHash2 ( const void * key, int len, unsigned int seed )
 	return h;
 } 
 
-
 SeedEntry::SeedEntry(unsigned int value,int loc0){
 	this->value = value;
 	(this->head)->location = loc0;
@@ -85,6 +84,22 @@ void SeedEntry::retrieve(node *&output){
 unsigned int SeedEntry::getSeed() {
 	return value;
 }
+
+void SeedEntry::print(){
+	node *next;
+	if(head==NULL) cout<<"Empty list \n"<<endl;
+	else
+	{
+		next = head;
+		while (next->next != NULL){
+			cout<<"location : "<<next->location<<endl;
+			next = next->next;
+		}
+		cout<<"location : "<<next->location<<endl;
+	}
+
+}
+
 
 SeedEntry::~SeedEntry(){
 	node *temp;
@@ -128,6 +143,9 @@ void HashEntry::putSeed(int taxa, const void * key,int location) {
 	}
 	// if this is the first time we observe this seed
 	locTable[hash] = new SeedEntry(seed,location);
+	
+	locTable[hash]->print();
+	
 }
 
 int HashEntry::getTaxa(){
@@ -200,14 +218,18 @@ void HashMap::addTax(int taxa, unsigned int size){
 }
 
 void HashMap::addSeed(int taxa, const void * seed,int location) {
+	cout<<"adding"<<endl;
 	int hash = (taxa% TABLE_SIZE);
+	cout<<hash<<endl;
 	while (table[hash] != NULL && table[hash]->getTaxa() != taxa){
 		hash = (hash+1)% TABLE_SIZE; // re-hash
 	}
-	
+	cout<<hash<<endl;
 	if (table[hash] != NULL) {
 		table[hash]->putSeed(taxa,seed,location);
+		cout<<"addSeed:"<<taxa<<": "<<seed<<endl;
 	}
+	else cout<<"addSeed:"<<"something wrong"<<endl;
 }
 
 void HashMap::Initialize(char * file) {
@@ -243,7 +265,7 @@ void HashMap::Initialize(char * file) {
 			infile.get(c);
 			infile.get(num_seeds, buffer_size, '\n'); 
 			counter ++;
-			if(counter<5) cout<<atoi(taxa)<<": "<<atoi(num_seeds)<<endl;
+			//if(counter<5) cout<<atoi(taxa)<<": "<<atoi(num_seeds)<<endl;
 		}
 		  
 		addTax(atoi(taxa),atoi(num_seeds));

@@ -52,6 +52,8 @@ int main(int argc, char * argv[]) {
 
   // Read the input data
   //start tesing hash table
+  
+
   HashMap *Map = new HashMap;
   Map->Initialize(statistic);
   //Map->addTax(449400,10);// just for test, it's the first taxID we have 
@@ -63,17 +65,17 @@ int main(int argc, char * argv[]) {
   
   cout<<"end adding seeds"<<endl;
   node *head = new node;
-  head = Map->get(169865,"ACGGTAGCTGCTGAGT");
+  //head = Map->get(169865,"ACGGTAGCTGCTGAGT");
   //printList(head);
   //cout<<Map->get(449400,0)<<endl;
   //cout<<Map->get(31600,0)<<endl;
   //end 
   
-  
+
   FileReader fr;
   //fr.PreProcessSubjects(subject_file, subject_data, num_bases);
-  fr.ReadSubjects(subject_file, subject_data, num_bases);
-  fr.ReadQueries(query_file, query_data, num_queries);
+  //fr.ReadSubjects(subject_file, subject_data, num_bases);
+  //fr.ReadQueries(query_file, query_data, num_queries);
 
   // Successful exit with cleanup
   delete[] subject_data;

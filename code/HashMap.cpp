@@ -102,13 +102,15 @@ void SeedEntry::print(){
 
 
 SeedEntry::~SeedEntry(){
-	node *temp;
+	node * temp;
+	node * prev;
 	temp = head;
+	prev = head;
 	while( temp->next!=NULL)
     {
-        temp = head->next;
-        free(head);
-        head = temp;
+        temp = temp->next;
+        free(prev);
+        prev = temp;
     }
    free(temp);
 }
@@ -142,10 +144,11 @@ void HashEntry::putSeed(int taxa, const void * key,int location) {
 	if (locTable[hash] != NULL) {
 		locTable[hash]->addLocation(location);
 	}
+	
 	// if this is the first time we observe this seed
 	locTable[hash] = new SeedEntry(seed,location);
 	
-	locTable[hash]->print();
+	//locTable[hash]->print();
 	
 }
 
@@ -170,6 +173,7 @@ node* HashEntry::getLocations(int taxa, const void * key) {
 		return NULL;
 	}
 	else {
+		locTable[hash]->print();
 		return locTable[hash]->retrieve();
 	}
 }
@@ -215,8 +219,10 @@ void HashMap::addTax(int taxa, int size){
 	}
 	if (table[hash] != NULL) {
 		delete table[hash];
+		cout<<"deleting this HashEntry: "<<taxa<<endl;
 	}
 	table[hash] = new HashEntry(taxa,size);
+	//cout<<" HashEntry: "<<taxa<<endl;
 }
 
 void HashMap::addSeed(int taxa, const void * seed,int location) {
@@ -227,13 +233,16 @@ void HashMap::addSeed(int taxa, const void * seed,int location) {
 		hash = (hash+1)% TABLE_SIZE; // re-hash
 	}
 	cout<<hash<<endl;
-	cout<<table[hash]->getTaxa()<<" "<<table[hash]->getSize()<<endl;
+//	cout<<table[hash]->getTaxa()<<" "<<table[hash]->getSize()<<endl;
 	if (table[hash] != NULL) {
 		cout<<"test"<<endl;
 		table[hash]->putSeed(taxa,seed,location);
 		cout<<"addSeed:"<<taxa<<": "<<seed<<endl;
 	}
-	else cout<<"addSeed:"<<"something wrong"<<endl;
+	else{
+		//table[hash] = new HashEntry(taxa,0);
+		cout<<"AddSeed: tax ID should be initialized"<<endl;
+	}
 }
 
 void HashMap::Initialize(char * file) {
@@ -269,10 +278,11 @@ void HashMap::Initialize(char * file) {
 			infile.get(c);
 			infile.get(num_seeds, buffer_size, '\n'); 
 			counter ++;
-			if(counter<5) cout<<atoi(taxa)<<": "<<atoi(num_seeds)<<endl;
+			//if(counter<5) cout<<atoi(taxa)<<": "<<atoi(num_seeds)<<endl;
+			addTax(atoi(taxa),atoi(num_seeds));
 		}
 		  
-		addTax(atoi(taxa),atoi(num_seeds));
+		
 		
 		if (infile.eof()) {
 			stop_now = true;

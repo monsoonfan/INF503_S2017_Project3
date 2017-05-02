@@ -51,6 +51,7 @@ class HashEntry {
 	 	int size;
 	 	
 	public:
+		
 		HashEntry(int, int); // input: taxID, size of this taxID
 		void putSeed(int, const void *,int); // input taxID, seed string, location of this seed
 		int getTaxa();

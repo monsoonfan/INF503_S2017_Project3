@@ -28,15 +28,28 @@ open(LOG,">$log_file") or die "Could not open $log_file\n";
 printBoth("Reading $virus_file...\n", LOG);
 my $line_count = 0;
 my $gi_count = 0;
+my $taxID_word_count = 0;
+my $gi_word_count = 0;
 my %GI_V;
 my %TaxID_V;
+my $tax_id = 0;
+my $DEBUG = 0;
 
 while(<VF>) {
     $line_count++;
     if (/>(\d+)-(\d+)/) {
-	$gi_count++;
 	$GI_V{$1} = "";
-	$TaxID_V{$2} = $TaxID_V{$2} + 1;
+	$tax_id = $2;
+	$gi_count++;
+	$TaxID_V{$tax_id}{num_genomes} = $TaxID_V{$tax_id}{num_genomes} + 1;
+
+	print "DBG: storing tax_id: $tax_id, has $TaxID_V{$tax_id}{num_genomes} genomes\n" if ($DEBUG);
+	print "DBG: num_chars so far: $TaxID_V{$tax_id}{char_count}\n" if ($DEBUG);
+    }
+    if (/^([A-Y]*)$/) {
+	my $num_chars = length($1);
+	$TaxID_V{$tax_id}{char_count} = $TaxID_V{$tax_id}{char_count} + $num_chars;
+	print "DBG: tax_id: $tax_id, num_chars: $num_chars, char_count: $TaxID_V{$tax_id}{char_count}\n" if ($DEBUG);
     }
 }
 
@@ -47,9 +60,10 @@ my $TI_size = (scalar(keys %TaxID_V));
 printBoth("   GI    = $GI_size\n", LOG);
 printBoth("   TaxID = $TI_size\n", LOG);
 
-# Report the number of GI's per TaxID
+# Report the number of words per TaxID
 foreach my $tkey (keys %TaxID_V) {
-    print "     $tkey: $TaxID_V{$tkey}\n";
+    $taxID_word_count = $TaxID_V{$tkey}{char_count} - ($TaxID_V{$tkey}{num_genomes} * 16);
+    print "     $tkey($TaxID_V{$tkey}{num_genomes}): $taxID_word_count\n";
 }    
 
 # Count the Bacteria info and report
@@ -62,9 +76,18 @@ my %TaxID_B;
 while(<BF>) {
     $line_count++;
     if (/>(\d+)-(\d+)/) {
-	$gi_count++;
 	$GI_B{$1} = "";
-	$TaxID_B{$2} = $TaxID_B{$2} + 1;
+	$tax_id = $2;
+	$gi_count++;
+	$TaxID_B{$tax_id}{num_genomes} = $TaxID_B{$tax_id}{num_genomes} + 1;
+
+	print "DBG: storing tax_id: $tax_id, has $TaxID_B{$tax_id}{num_genomes} genomes\n" if ($DEBUG);
+	print "DBG: num_chars so far: $TaxID_B{$tax_id}{char_count}\n" if ($DEBUG);
+    }
+    if (/^([A-Y]*)$/) {
+	my $num_chars = length($1);
+	$TaxID_B{$tax_id}{char_count} = $TaxID_B{$tax_id}{char_count} + $num_chars;
+	print "DBG: tax_id: $tax_id, num_chars: $num_chars, char_count: $TaxID_B{$tax_id}{char_count}\n" if ($DEBUG);
     }
 }
 
@@ -78,7 +101,8 @@ printBoth("   TaxID = $TI_B_size\n", LOG);
 
 # Report the number of GI's per TaxID
 foreach my $tkey (keys %TaxID_B) {
-    print "     $tkey: $TaxID_B{$tkey}\n";
+    $taxID_word_count = $TaxID_B{$tkey}{char_count} - ($TaxID_B{$tkey}{num_genomes} * 16);
+    print "     $tkey($TaxID_B{$tkey}{num_genomes}): $taxID_word_count\n";
 }    
 
 close (VF, BF, LOG);

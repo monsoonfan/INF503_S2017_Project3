@@ -9,5 +9,6 @@
 
 module load perl
 
- srun perl /home/jc3464/INF503/INF503_S2017_Project3/misc_scripts/CountBins.pl
+ srun perl CountBins.pl
+
 

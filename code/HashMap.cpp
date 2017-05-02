@@ -77,8 +77,8 @@ void SeedEntry::addLocation(int loc){
 	ptr->next = NULL;
 }
 
-void SeedEntry::retrieve(node *&output){
-	output = head;
+node* SeedEntry::retrieve(){
+	return head;
 }
 
 unsigned int SeedEntry::getSeed() {
@@ -118,9 +118,10 @@ SeedEntry::~SeedEntry(){
 
 ///////////////////////////////////////////
 
-HashEntry::HashEntry(int taxa, unsigned int size){
+HashEntry::HashEntry(int taxa, int size){
 	this->taxa = taxa;
 	this->locTable = new SeedEntry * [size];
+	this->size= size;
 }
 
 // add seed to this taxID entry
@@ -151,7 +152,7 @@ void HashEntry::putSeed(int taxa, const void * key,int location) {
 int HashEntry::getTaxa(){
 	return taxa;
 }
-void HashEntry::getLocations(int taxa, const void * key,node *&output) {
+node* HashEntry::getLocations(int taxa, const void * key) {
 	unsigned int seed;
 	if (this->taxa == taxa) {
 		seed = MurmurHash2 (key, seed_len, hash_seed );
@@ -166,14 +167,14 @@ void HashEntry::getLocations(int taxa, const void * key,node *&output) {
 	}
 	// if this seed already present in the previous locations
 	if (locTable[hash] == NULL) {
-		output= NULL;
+		return NULL;
 	}
 	else {
-		locTable[hash]->retrieve(output);
+		return locTable[hash]->retrieve();
 	}
 }
 
-unsigned int HashEntry::getSize() {
+int HashEntry::getSize() {
 	return size;
 }
 
@@ -193,20 +194,21 @@ HashMap::HashMap() {
 }
 
 
-void HashMap::get(int taxa, const void * seed,node *&output) {
+node* HashMap::get(int taxa, const void * seed) {
 	int hash = (taxa% TABLE_SIZE);
+	node * head;
 	while (table[hash] != NULL && table[hash]->getTaxa() != taxa){
 		hash = (hash+1)% TABLE_SIZE; // re-hash
 	}
 	if (table[hash] == NULL) {
-		output = NULL;
+		return NULL;
 	}
 	else{
-		table[hash]->getLocations(taxa,seed,output);
+		return table[hash]->getLocations(taxa,seed);
 	}
 }
 
-void HashMap::addTax(int taxa, unsigned int size){
+void HashMap::addTax(int taxa, int size){
 	int hash = (taxa% TABLE_SIZE);
 	while (table[hash] != NULL && table[hash]->getTaxa() != taxa){
 		hash = (hash+1)% TABLE_SIZE; // re-hash
@@ -225,7 +227,9 @@ void HashMap::addSeed(int taxa, const void * seed,int location) {
 		hash = (hash+1)% TABLE_SIZE; // re-hash
 	}
 	cout<<hash<<endl;
+	cout<<table[hash]->getTaxa()<<" "<<table[hash]->getSize()<<endl;
 	if (table[hash] != NULL) {
+		cout<<"test"<<endl;
 		table[hash]->putSeed(taxa,seed,location);
 		cout<<"addSeed:"<<taxa<<": "<<seed<<endl;
 	}
@@ -265,7 +269,7 @@ void HashMap::Initialize(char * file) {
 			infile.get(c);
 			infile.get(num_seeds, buffer_size, '\n'); 
 			counter ++;
-			//if(counter<5) cout<<atoi(taxa)<<": "<<atoi(num_seeds)<<endl;
+			if(counter<5) cout<<atoi(taxa)<<": "<<atoi(num_seeds)<<endl;
 		}
 		  
 		addTax(atoi(taxa),atoi(num_seeds));

@@ -62,33 +62,113 @@ unsigned int MurmurHash2 ( const void * key, int len, unsigned int seed )
 	return h;
 } 
 
+
+struct node {
+	int location;
+	node* next;
+};
+
+SeedEntry::SeedEntry(unsigned int value,int loc0){
+	this->value = value;
+	(this->head)->location = loc0;
+	(this->head)->next = NULL;
+}
+
+void SeedEntry::addLocation(int loc){
+	node *ptr = head;
+	while(ptr != NULL){
+		ptr = ptr->next;
+	}
+	ptr->location = loc;
+	ptr->next = NULL;
+}
+
+void SeedEntry::retrieve(node *&output){
+	output = head;
+}
+
+SeedEntry::~SeedEntry(){
+	node *temp;
+	temp = head;
+	while( temp->next!=NULL)
+    {
+        temp = head->next;
+        free(head);
+        head = temp;
+    }
+   free(temp);
+}
+
+
+
+
+///////////////////////////////////////////
+
 HashEntry::HashEntry(int taxa, unsigned int size){
 	this->taxa = taxa;
-	this->size = size; //use &head
-	value = new unsigned int[size];
-	cursor = 0;
+	this->locTable = new SeedEntry * [size];
 }
-// put a new value into hash table(key->taxaID)
-void HashEntry::put(int taxa, const void * key) {
+
+// add seed to this taxID entry
+void HashEntry::putSeed(int taxa, const void * key,int location) {
 	unsigned int seed;
 	if (this->taxa == taxa) {
 		seed = MurmurHash2 (key, seed_len, hash_seed );
-		value[cursor] = seed;
-		cursor++;
 	}
+	else {
+		cout<<"The tax ID does not correspond to this hash entry"<<endl;
+	}
+	
+	unsigned int hash = (seed% size);
+	while (locTable[hash] != NULL && locTable[hash]->getSeed() != seed){
+		hash = (hash+1)% size; // re-hash
+	}
+	// if this seed already present in the previous locations
+	if (locTable[hash] != NULL) {
+		locTable[hash]->addLocation(location);
+	}
+	// if this is the first time we observe this seed
+	locTable[hash] = new SeedEntry(seed,location);
 }
 
 int HashEntry::getTaxa(){
 	return taxa;
 }
-
-int HashEntry::getValue(int n) {
-	return value[n];  //the n th seed in the taxa
+void HashEntry::getLocations(int taxa, const void * key,node *&output) {
+	unsigned int seed;
+	if (this->taxa == taxa) {
+		seed = MurmurHash2 (key, seed_len, hash_seed );
+	}
+	else {
+		cout<<"The tax ID does not correspond to this hash entry"<<endl;
+	}
+	
+	unsigned int hash = (seed% size);
+	while (locTable[hash] != NULL && locTable[hash]->getSeed() != seed){
+		hash = (hash+1)% size; // re-hash
+	}
+	// if this seed already present in the previous locations
+	if (locTable[hash] == NULL) {
+		return NULL;
+	}
+	else {
+		return locTable[hash]->retrieve(node *&output);
+	}
 }
 
-int HashEntry::getSize() {
+unsigned int HashEntry::getSize() {
 	return size;
 }
+
+HashEntry::~HashEntry() {
+	for(int i=0;i<size;i++){
+		if(locTable[i] != NULL) delete locTable[i];
+	delete[] locTable;
+	}
+}
+
+
+////////////////////////////////////////////
 
 HashMap::HashMap() {
 	table = new HashEntry * [TABLE_SIZE];
@@ -96,38 +176,38 @@ HashMap::HashMap() {
 }
 
 
-int HashMap::get(int key,int position) {
-	int hash = (key% TABLE_SIZE);
-	while (table[hash] != NULL && table[hash]->getTaxa() != key){
+void HashMap::get(int taxa, const void * seed,node *&output) {
+	int hash = (taxa% TABLE_SIZE);
+	while (table[hash] != NULL && table[hash]->getTaxa() != taxa){
 		hash = (hash+1)% TABLE_SIZE; // re-hash
 	}
 	if (table[hash] == NULL) {
-		return -1;
+		output = NULL;
 	}
 	else{
-		return table[hash]->getValue(position);
+		table[hash]->getLocations(taxa,seed,output);
 	}
 }
 
-void HashMap::addTax(int key, unsigned int size){
-	int hash = (key% TABLE_SIZE);
-	while (table[hash] != NULL && table[hash]->getTaxa() != key){
+void HashMap::addTax(int taxa, unsigned int size){
+	int hash = (taxa% TABLE_SIZE);
+	while (table[hash] != NULL && table[hash]->getTaxa() != taxa){
 		hash = (hash+1)% TABLE_SIZE; // re-hash
 	}
 	if (table[hash] != NULL) {
 		delete table[hash];
 	}
-	table[hash] = new HashEntry(key,size);
+	table[hash] = new HashEntry(taxa,size);
 }
 
-void HashMap::addSeed(int key, const void * seed) {
-	int hash = (key% TABLE_SIZE);
-	while (table[hash] != NULL && table[hash]->getTaxa() != key){
+void HashMap::addSeed(int taxa, const void * seed,int location) {
+	int hash = (taxa% TABLE_SIZE);
+	while (table[hash] != NULL && table[hash]->getTaxa() != taxa){
 		hash = (hash+1)% TABLE_SIZE; // re-hash
 	}
 	
 	if (table[hash] != NULL) {
-		table[hash]->put(key,seed);
+		table[hash]->putSeed(taxa,seed,location);
 	}
 }
 

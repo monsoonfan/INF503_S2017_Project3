@@ -58,10 +58,10 @@ int main(int argc, char * argv[]) {
   //Map->addTax(1714570,4);
   
   // Map->addLocation(<seed_num>,"SEED",<int: start_loc>)
-  Map->addSeed(449400,"ACGGTAGCTGCTGAGT");
-  Map->addSeed(31600,"ACGGTAGCTGCTGAGT");
-  cout<<Map->get(449400,0)<<endl;
-  cout<<Map->get(31600,0)<<endl;
+  Map->addSeed(449400,"ACGGTAGCTGCTGAGT",0);
+  Map->addSeed(31600,"ACGGTAGCTGCTGAGT",0);
+  //cout<<Map->get(449400,0)<<endl;
+  //cout<<Map->get(31600,0)<<endl;
   //end 
   
   

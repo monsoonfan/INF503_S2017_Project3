@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "FileReader.h"
+#include "Word.h"
+#include "HashMap.h"
 #include <iostream>
 #include <fstream>
 
@@ -53,8 +55,6 @@ needs:
 
 */
 
-
-
 /*
 --- ReadSubjects ---
 - 4/13/17
@@ -85,13 +85,12 @@ int FileReader::ReadSubjects(char * file, char * values, int num_bases_to_read)
   char * gi_id = new char[id_buffer_size];
   char * tax_id = new char[id_buffer_size];
 
+  int word_size = 16;
+  Word word = Word();
+  int num_words = 0; // per taxID
   int start_index = 0;
   int end_index = 0;
 
-  int word_size = 16;
-  //Word word;
-  int num_words = 0; // per taxID
-  
   ifstream infile(file);
   
   if (! infile) {
@@ -111,16 +110,15 @@ int FileReader::ReadSubjects(char * file, char * values, int num_bases_to_read)
       if (c == '\n') {
 	if (dbg) cout << c;
 	line_count++;
-	num_words = 0;
 	continue;
       }
 
       // Grab the header - need to do this before non-ACGT swap
       if (c == '>') {
-	// TODO: store on the hash right here, along with 4 NNNNs (4 N only if gi_count > 0
-	//       and potentially not if stop_next_header)
-	// for (int i = 0; i < 4; i++) {values[char_count++] = 'N''}
+	word.reset();                              // reset the word buffer to prep it for next GI
+
 	if (stop_next_header) break;
+
 	infile.get(gi_id, id_buffer_size, '-');    // get the GI
 	infile.get(c);                             // advance past the -
 	if (c != '-') {
@@ -148,15 +146,18 @@ int FileReader::ReadSubjects(char * file, char * values, int num_bases_to_read)
 	swap_to_N_count++;
       }
 
+      // Store a word here after reading a char, this will store only if the word is full
+      num_words = num_words + word.store(c);
+      //cout << num_words << endl;;
+
       // Fail safe in case of broken file
       if (char_count > num_bases_to_read * 2) {
 	printf("Stopping at fail safe, please check the file\n");
-	return NULL;
+	return -1;
       }
 
       // Finish up cleanly if we hit EOF
       if (infile.eof()) {
-	// TODO: store on hash right here
 	stop_now = true;
 	continue;
       }
@@ -178,6 +179,7 @@ int FileReader::ReadSubjects(char * file, char * values, int num_bases_to_read)
   cout << "Done, processed " << line_count << " lines of " << file << endl;
   cout << "Total of " << char_count << " bases read from " << gi_count << " sequences" << endl;
   cout << swap_to_N_count << " were swapped from non-ACGT to 'N'" << endl;
+  cout << "Total of " << num_words << " words were stored" << endl;
   cout << endl;
   return char_count;
 
@@ -206,6 +208,12 @@ int FileReader::ReadQueries(char * file, char * values, int num_queries_to_read)
   
   int id_buffer_size = 100;
   char * read_id = new char[id_buffer_size];
+
+  int seed_size = 16;
+  Word seed = Word();
+  int num_seeds = 0; // per taxID
+  int start_index = 0;
+  int end_index = 0;
   
   ifstream infile(file);
   
@@ -253,10 +261,14 @@ int FileReader::ReadQueries(char * file, char * values, int num_queries_to_read)
 	swap_to_N_count++;
       }
 
+      // Store a word here after reading a char, this will store only if the word is full
+      num_seeds = num_seeds + seed.store(c);
+      //cout << num_seeds << endl;;
+
       // Fail safe in case of broken file
       if (line_count > num_queries_to_read * 3) {
 	printf("Stopping at fail safe, please check the file\n");
-	return NULL;
+	return -1;
       }
 
       // Finish up cleanly if we hit EOF
@@ -281,6 +293,7 @@ int FileReader::ReadQueries(char * file, char * values, int num_queries_to_read)
   cout << "Done, processed " << line_count << " lines of " << file << endl;
   cout << "Total of " << char_count << " bases read from " << read_count << " reads" << endl;
   cout << swap_to_N_count << " were swapped from non-ACGT to 'N'" << endl;
+  cout << "Total of " << num_seeds << " seeds were stored" << endl;
   cout << endl;
   return char_count;
 

@@ -42,7 +42,7 @@ int main(int argc, char * argv[]) {
   if (strcmp(subject_file, output_file) == 0) {cerr << "ERROR: input and output file names the same!" << endl ; return EXIT_FAILURE;}
   if (access(subject_file, F_OK) == -1) {cerr << "ERROR: Can't open file " << subject_file << endl ; return EXIT_FAILURE;}
   if (access(query_file, F_OK) == -1) {cerr << "ERROR: Can't open file " << query_file << endl ; return EXIT_FAILURE;}
-
+  if (access(statistic, F_OK) == -1) {cerr << "ERROR: Can't open file " << statistic << endl ; return EXIT_FAILURE;}
   // Variables for main
   int extra_bases = 25000;
   int num_queries = 961710;
@@ -58,12 +58,12 @@ int main(int argc, char * argv[]) {
   //Map->addTax(1714570,4);
   cout<<"starting adding seeds"<<endl;
   // Map->addLocation(<seed_num>,"SEED",<int: start_loc>)
-  Map->addSeed(449400,"ACGGTAGCTGCTGAGT",8);
-  Map->addSeed(31600,"ACGGTAGCTGCTGAGT",5);
+  Map->addSeed(663559,"ACGGTAGCTGCTGAGT",8);
+  Map->addSeed(169865,"ACGGTAGCTGCTGAGT",5);
   
   cout<<"end adding seeds"<<endl;
   node *head = new node;
-  Map->get(31600,"ACGGTAGCTGCTGAGT",head);
+  head = Map->get(169865,"ACGGTAGCTGCTGAGT");
   //printList(head);
   //cout<<Map->get(449400,0)<<endl;
   //cout<<Map->get(31600,0)<<endl;

@@ -14,9 +14,10 @@
 
 unsigned int MurmurHash2 ( const void * , int, unsigned int);
 
-struct node {
-	int;
-	node*;
+class node {
+	public:
+		int location;
+		node* next;
 };
 
 class SeedEntry {

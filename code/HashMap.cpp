@@ -63,11 +63,6 @@ unsigned int MurmurHash2 ( const void * key, int len, unsigned int seed )
 } 
 
 
-struct node {
-	int location;
-	node* next;
-};
-
 SeedEntry::SeedEntry(unsigned int value,int loc0){
 	this->value = value;
 	(this->head)->location = loc0;
@@ -85,6 +80,10 @@ void SeedEntry::addLocation(int loc){
 
 void SeedEntry::retrieve(node *&output){
 	output = head;
+}
+
+unsigned int SeedEntry::getSeed() {
+	return value;
 }
 
 SeedEntry::~SeedEntry(){
@@ -149,10 +148,10 @@ void HashEntry::getLocations(int taxa, const void * key,node *&output) {
 	}
 	// if this seed already present in the previous locations
 	if (locTable[hash] == NULL) {
-		return NULL;
+		output= NULL;
 	}
 	else {
-		return locTable[hash]->retrieve(node *&output);
+		locTable[hash]->retrieve(output);
 	}
 }
 

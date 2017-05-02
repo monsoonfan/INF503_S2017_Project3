@@ -18,7 +18,10 @@ class node {
 	public:
 		int location;
 		node* next;
+		
 };
+
+
 
 class SeedEntry {
 	private:
@@ -30,6 +33,7 @@ class SeedEntry {
 		unsigned int getSeed();
 		void addLocation(int);
 		void retrieve(node *&);
+		void print();
 		//int listSize();
 		~SeedEntry();
 		

@@ -14,9 +14,10 @@
 
 unsigned int MurmurHash2 ( const void * , int, unsigned int);
 
-struct node {
-	int location;
-	node* next;
+class node {
+	public:
+		int location;
+		node* next;
 };
 
 class SeedEntry {
@@ -25,25 +26,28 @@ class SeedEntry {
 		node * head; // the list of locations where this seed present
 		
 	public:
-		SeedEntry(int); // input: the size of this location table
-		void retrieve(node &*);
+		SeedEntry(unsigned int,int); // input: seed value and the first occurred location
+		unsigned int getSeed();
+		void addLocation(int);
+		void retrieve(node *&);
+		//int listSize();
+		~SeedEntry();
 		
 };
 
 class HashEntry {
 	private:
 	 	int taxa;
-	 	SeedEntry *locations;
+	 	SeedEntry **locTable;
 	 	unsigned int size;
-	 	unsigned int cursor;
 	 	
 	public:
-		HashEntry(int, unsigned int);
-		// put a new value into hash table
-		void put(int, const void *);
+		HashEntry(int, unsigned int); // input: taxID, size of this taxID
+		void putSeed(int, const void *,int); // input taxID, seed string, location of this seed
 		int getTaxa();
-		int getValue(int);
-		int getSize();
+		void getLocations(int, const void *,node *&);
+		unsigned int getSize();
+		~HashEntry();
 
 };
 
@@ -52,9 +56,9 @@ class HashMap{
 		HashEntry **table;
 	public:
 		HashMap();
-		int get(int,int);
-		void addTax(int, unsigned int); // input: taxaID, size of this taxID
-		void addSeed(int, const void *,int); // input taxID, seed string, position of this seed
+		void get(int, const void *,node *&); // input: taxID, seed, output pointer
+		void addTax(int, unsigned int); // input: taxaID, size of it
+		void addSeed(int, const void *,int); // input taxID, seed string, location of this seed
 		void Initialize(char *);
 		~HashMap();
 };

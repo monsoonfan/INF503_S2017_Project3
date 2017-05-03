@@ -55,28 +55,28 @@ the new character in the word.
 This method manages head, write will only manage the characters in relation to head.
 
 */
-int Word::store(char c)
+int Word::store(char c, char * buffer)
 {
   // Variables
   int write_val = 0;
-
-	// First step is to write out the current buffer
-  write_val = write(word_size);
-
-	// Second is to store the new char at the head
-	array[head] = c;
-	count++;
-	if (count >= word_size) is_full = true;
-
-	// Third is to adjust head, wrap around if at last char
-	if (head == word_size - 1) {
-		head = 0; // wrap-around
-	}
-	else {
-		head++;
-	}
-
-	return write_val;
+  
+  // First step is to write out the current buffer
+  write_val = write(word_size, buffer);
+  
+  // Second is to store the new char at the head
+  array[head] = c;
+  count++;
+  if (count >= word_size) is_full = true;
+  
+  // Third is to adjust head, wrap around if at last char
+  if (head == word_size - 1) {
+    head = 0; // wrap-around
+  }
+  else {
+    head++;
+  }
+  
+  return write_val;
 }
 
 
@@ -89,7 +89,7 @@ int Word::store(char c)
 Will write word_size chars from the buffer array at the current head location
 
 */
-unsigned int Word::write(int s)
+unsigned int Word::write(int s, char * buffer)
 {
 	// Variables
 	int index = head;
@@ -100,15 +100,13 @@ unsigned int Word::write(int s)
 		// Write word_size chars starting from head
 		for (int i = 0; i < word_size; i++) {
 			if (DEBUG && debug) cout << array[index];
-			// TODO: how to write the values, I'm thinking that a pointer to 
-			//       hash element where this will go gets passed in and we write
-			//       one char at a time, incrementing the pointer with ++
 			if (index >= word_size - 1) {
 				index = 0;
 			}
 			else {
 				index++;
 			}
+			buffer[index] = array[index];
 		}
 		if (DEBUG && debug) cout << endl;
 		return 1;

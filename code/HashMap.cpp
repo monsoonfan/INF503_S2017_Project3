@@ -270,7 +270,7 @@ void HashMap::addSeed(int taxa, const void * seed,int location) {
 	}
 	else{
 		//table[hash] = new HashEntry(taxa,0);
-		cout<<"AddSeed: tax ID should be initialized"<<endl;
+	  cout<<"AddSeed: tax ID should be initialized: " << taxa <<endl;
 	}
 }
 

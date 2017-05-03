@@ -67,7 +67,7 @@ Combine N number of bases from multiple genomic sequences into a single sequence
 - read header information 
 
 */
-int FileReader::ReadSubjects(char * file, char * values, int num_bases_to_read)
+int FileReader::ReadSubjects(char * file, char * values, int num_bases_to_read, HashMap * map)
 {
   cout << "Reading " << num_bases_to_read << " bases of FASTA file ..." << file << endl ;
 
@@ -90,6 +90,11 @@ int FileReader::ReadSubjects(char * file, char * values, int num_bases_to_read)
   int num_words = 0; // per taxID
   int start_index = 0;
   int end_index = 0;
+  char * write_buffer = new char[word_size];
+  int store_return = 0;
+  const int base = 10;
+  char * endptr;
+  int val;
 
   ifstream infile(file);
   
@@ -147,7 +152,19 @@ int FileReader::ReadSubjects(char * file, char * values, int num_bases_to_read)
       }
 
       // Store a word here after reading a char, this will store only if the word is full
-      num_words = num_words + word.store(c);
+      cout << "\nDBG: storing c " << c << endl;
+      store_return = word.store(c, write_buffer);
+      cout << "DBG: write_buffer: " << write_buffer << endl;
+      if (store_return) {
+	// map->addSeed(static_cast<int>(tax_id), write_buffer, char_count); // doesn't compile
+	// val = strtol(write_buffer, &endptr, base); // this give 0 for everything at first try
+	
+	//val = atoi(write_buffer); // 0 value
+	val = atoi(tax_id);
+	cout << "DBG:  val = " << val << " from tax_id: " << tax_id << endl;
+	map->addSeed(val, write_buffer, char_count); // doesn't compile
+      }
+      num_words += store_return;
       //cout << num_words << endl;;
 
       // Fail safe in case of broken file
@@ -174,6 +191,7 @@ int FileReader::ReadSubjects(char * file, char * values, int num_bases_to_read)
   // Clean up
   delete[] gi_id;
   delete[] tax_id;
+  delete[] write_buffer;
 
   // Report and return
   cout << "Done, processed " << line_count << " lines of " << file << endl;
@@ -264,7 +282,7 @@ int FileReader::ReadQueries(char * file, char * values, int num_queries_to_read)
       }
 
       // Store a word here after reading a char, this will store only if the word is full
-      num_seeds = num_seeds + seed.store(c);
+      //num_seeds = num_seeds + seed.store(c);
       //cout << num_seeds << endl;;
 
       // Fail safe in case of broken file

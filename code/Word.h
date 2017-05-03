@@ -17,9 +17,8 @@ class Word
   // Methods
   Word();
   ~Word();
-  int store (char);
-  unsigned int write(int); // TODO: add hash as input here
-//  char buildString();    // last 16 chars to hash function
+  int store (char, char *);
+  unsigned int write(int, char *);
   void reset();
   
 };

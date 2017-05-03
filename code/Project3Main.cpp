@@ -61,11 +61,14 @@ int main(int argc, char * argv[]) {
   cout<<"starting adding seeds"<<endl;
   // Map->addLocation(<seed_num>,"SEED",<int: start_loc>)
   Map->addSeed(663559,"ACGGTAGCTGCTGAGT",8);
+  Map->addSeed(663559,"ACGGTAGCTGCTGAGT",15);
+  Map->addSeed(663559,"ACGGTAGCTGCTGAGT",25);
   Map->addSeed(169865,"ACGGTAGCTGCTGAGT",5);
   
   cout<<"end adding seeds"<<endl;
   node *head = new node;
-  //head = Map->get(169865,"ACGGTAGCTGCTGAGT");
+  Map->get(169865,"ACGGTAGCTGCTGAGT",head);
+  cout<<head->location;
   //printList(head);
   //cout<<Map->get(449400,0)<<endl;
   //cout<<Map->get(31600,0)<<endl;

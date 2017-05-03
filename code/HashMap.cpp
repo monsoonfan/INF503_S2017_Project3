@@ -9,6 +9,8 @@ const int TABLE_SIZE = 265000;
 const int seed_len = 16;
 const unsigned int hash_seed= 1481986944;
 
+const bool debug = true;
+
 using namespace std;
 
 unsigned int MurmurHash2 ( const void * key, int len, unsigned int seed )
@@ -69,16 +71,28 @@ SeedEntry::SeedEntry(unsigned int value,int loc0){
 }
 
 void SeedEntry::addLocation(int loc){
-	node *ptr = head;
-	while(ptr != NULL){
-		ptr = ptr->next;
+	node *temp = new node;
+	temp->location = loc;
+	temp->next = NULL;
+	int counter = 0;
+	if(!head){
+		head = temp;
+		return;
 	}
-	ptr->location = loc;
-	ptr->next = NULL;
+	else {
+		node * last = head;
+		while(last->next) {
+			last = last->next;
+			counter++;
+		}
+		last->next = temp;
+	}
+	if(debug) cout<<"counter: "<<counter<<endl;
+	
 }
 
-node* SeedEntry::retrieve(){
-	return head;
+void SeedEntry::retrieve(node *&output){
+	output= head;
 }
 
 unsigned int SeedEntry::getSeed() {
@@ -92,10 +106,10 @@ void SeedEntry::print(){
 	{
 		next = head;
 		while (next->next != NULL){
-			cout<<"location : "<<next->location<<endl;
+			if(debug) cout<<"location : "<<next->location<<endl;
 			next = next->next;
 		}
-		cout<<"location : "<<next->location<<endl;
+		if(debug) cout<<"location : "<<next->location<<endl;
 	}
 
 }
@@ -131,31 +145,45 @@ void HashEntry::putSeed(int taxa, const void * key,int location) {
 	unsigned int seed;
 	if (this->taxa == taxa) {
 		seed = MurmurHash2 (key, seed_len, hash_seed );
+		if(debug) cout<<"the hashed value of this seed: "<<seed<<endl;
 	}
 	else {
 		cout<<"The tax ID does not correspond to this hash entry"<<endl;
 	}
 	
-	unsigned int hash = (seed% size);
+	int hash = (seed% size);
+	if(debug){
+		cout<<"size =" <<size<<endl;
+		cout<<"hash = (seed% size)=" << hash<<endl;
+		
+	}
+
 	while (locTable[hash] != NULL && locTable[hash]->getSeed() != seed){
 		hash = (hash+1)% size; // re-hash
 	}
 	// if this seed already present in the previous locations
 	if (locTable[hash] != NULL) {
 		locTable[hash]->addLocation(location);
+		if(debug) cout<<"if this seed already present in the previous locations"<<endl;
 	}
-	
+	else {
+		locTable[hash] = new SeedEntry(seed,location);
+		if(debug) cout<<"if this is the first time we observe this seed"<<endl;
+	}
 	// if this is the first time we observe this seed
-	locTable[hash] = new SeedEntry(seed,location);
 	
-	//locTable[hash]->print();
+	if(debug){
+		printf("printing the current Seed Entry: \n");
+		locTable[hash]->print();
+	} 
+	
 	
 }
 
 int HashEntry::getTaxa(){
 	return taxa;
 }
-node* HashEntry::getLocations(int taxa, const void * key) {
+void HashEntry::getLocations(int taxa, const void * key,node *&output) {
 	unsigned int seed;
 	if (this->taxa == taxa) {
 		seed = MurmurHash2 (key, seed_len, hash_seed );
@@ -170,11 +198,11 @@ node* HashEntry::getLocations(int taxa, const void * key) {
 	}
 	// if this seed already present in the previous locations
 	if (locTable[hash] == NULL) {
-		return NULL;
+		output = NULL;
 	}
 	else {
 		locTable[hash]->print();
-		return locTable[hash]->retrieve();
+		locTable[hash]->retrieve(output);
 	}
 }
 
@@ -198,17 +226,18 @@ HashMap::HashMap() {
 }
 
 
-node* HashMap::get(int taxa, const void * seed) {
+void HashMap::get(int taxa, const void * seed,node *&output) {
 	int hash = (taxa% TABLE_SIZE);
 	node * head;
 	while (table[hash] != NULL && table[hash]->getTaxa() != taxa){
 		hash = (hash+1)% TABLE_SIZE; // re-hash
 	}
 	if (table[hash] == NULL) {
-		return NULL;
+		output = NULL;
 	}
 	else{
-		return table[hash]->getLocations(taxa,seed);
+		if(debug) printf("HashMap::get \n");
+		table[hash]->getLocations(taxa,seed,output);
 	}
 }
 
@@ -226,18 +255,18 @@ void HashMap::addTax(int taxa, int size){
 }
 
 void HashMap::addSeed(int taxa, const void * seed,int location) {
-	cout<<"adding"<<endl;
 	int hash = (taxa% TABLE_SIZE);
-	cout<<hash<<endl;
+	//cout<<hash<<endl;
 	while (table[hash] != NULL && table[hash]->getTaxa() != taxa){
 		hash = (hash+1)% TABLE_SIZE; // re-hash
 	}
-	cout<<hash<<endl;
+	//cout<<hash<<endl;
 //	cout<<table[hash]->getTaxa()<<" "<<table[hash]->getSize()<<endl;
 	if (table[hash] != NULL) {
-		cout<<"test"<<endl;
 		table[hash]->putSeed(taxa,seed,location);
-		cout<<"addSeed:"<<taxa<<": "<<seed<<endl;
+		
+		cout<<"addSeed:"<<taxa<<": ";
+		printf("%s \n",seed);
 	}
 	else{
 		//table[hash] = new HashEntry(taxa,0);
@@ -254,7 +283,7 @@ void HashMap::Initialize(char * file) {
 	 }
 	 
 	int newID = 1;
-	bool stop_now;
+	bool stop_now = false;
 	int line_count = 0;
 	char * taxa= new char[buffer_size];
 	char * num_seeds = new char[buffer_size];

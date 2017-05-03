@@ -226,9 +226,8 @@ HashMap::HashMap() {
 }
 
 
-void HashMap::get(int taxa, const void * seed,node *&output) {
+void HashMap::get(int taxa, const void * seed,node * output) {
 	int hash = (taxa% TABLE_SIZE);
-	node * head;
 	while (table[hash] != NULL && table[hash]->getTaxa() != taxa){
 		hash = (hash+1)% TABLE_SIZE; // re-hash
 	}

@@ -45,7 +45,8 @@ int main(int argc, char * argv[]) {
   if (access(statistic, F_OK) == -1) {cerr << "ERROR: Can't open file " << statistic << endl ; return EXIT_FAILURE;}
   // Variables for main
   int extra_bases = 25000;
-  int num_queries = 961710;
+  //int num_queries = 961710;
+  int num_queries = num_bases;
   int num_mers_per_query = 100;
   char * subject_data = new char[num_bases + extra_bases];
   char * query_data = new char[num_queries * num_mers_per_query + 1];
@@ -54,31 +55,45 @@ int main(int argc, char * argv[]) {
   //start tesing hash table
   
 
-  HashMap *Map = new HashMap;
+  HashMap * Map = new HashMap;
   Map->Initialize(statistic);
+  /*
   //Map->addTax(449400,10);// just for test, it's the first taxID we have 
   //Map->addTax(1714570,4);
   cout<<"starting adding seeds"<<endl;
   // Map->addLocation(<seed_num>,"SEED",<int: start_loc>)
-  Map->addSeed(663559,"ACGGTAGCTGCTGAGT",8);
+
+  //const char * test_string = "ACGGTAGCTGCTGAGT"; // this works, but not sure how to generate this from the Word class
+  char test_string[16];
+  for (int i = 0; i < 16; i++) {
+    test_string[i] = 'A';
+  }
+  //Map->addSeed(663559,"ACGGTAGCTGCTGAGT",8);
+  Map->addSeed(663559,test_string,8);
+
+  node *head = new node;
+  //Map->get(169865,"ACGGTAGCTGCTGAGT",head);
+  //Map->get(169865,test_string,head);
+  //char * test_string = "
+  /*
   Map->addSeed(663559,"ACGGTAGCTGCTGAGT",15);
   Map->addSeed(663559,"ACGGTAGCTGCTGAGT",25);
   Map->addSeed(169865,"ACGGTAGCTGCTGAGT",5);
   
   cout<<"end adding seeds"<<endl;
-  node *head = new node;
   Map->get(169865,"ACGGTAGCTGCTGAGT",head);
   cout<<head->location;
   //printList(head);
   //cout<<Map->get(449400,0)<<endl;
   //cout<<Map->get(31600,0)<<endl;
   //end 
+  */
   
 
   FileReader fr;
-  //fr.PreProcessSubjects(subject_file, subject_data, num_bases);
-  //fr.ReadSubjects(subject_file, subject_data, num_bases);
-  //fr.ReadQueries(query_file, query_data, num_queries);
+  cout << "DBG reading subjects..." << endl;
+  fr.ReadSubjects(subject_file, subject_data, num_bases, Map);
+  //  fr.ReadQueries(query_file, query_data, num_queries);
 
   // Successful exit with cleanup
   delete[] subject_data;

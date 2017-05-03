@@ -17,9 +17,6 @@ unsigned int MurmurHash2 ( const void * , int, unsigned int);
 class node {
 	public:
 		node(){}
-		node(int l){
-			this->location = l;
-		}
 		int location;
 		node* next;
 		
@@ -33,8 +30,9 @@ class SeedEntry {
 		node * head; // the list of locations where this seed present
 		
 	public:
-		SeedEntry(unsigned int,int); // input: seed value and the first occurred location
+		
 		SeedEntry(){}
+		SeedEntry(unsigned int,int); // input: seed value and the first occurred location
 		unsigned int getSeed();
 		void addLocation(int);
 		void retrieve(node *&);

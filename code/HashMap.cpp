@@ -5,7 +5,7 @@
 #include <fstream>
 #include "HashMap.h"
 
-const int TABLE_SIZE = 265000;
+const int TABLE_SIZE = 26500;
 const int seed_len = 16;
 const unsigned int hash_seed= 1481986944;
 
@@ -136,7 +136,8 @@ SeedEntry::~SeedEntry(){
 
 HashEntry::HashEntry(int taxa, int size){
 	this->taxa = taxa;
-	this->locTable = new SeedEntry * [size];
+	locTable = new SeedEntry * [size];
+	for (int i=0; i<size;i++) locTable[i] = NULL;
 	this->size= size;
 }
 
@@ -226,7 +227,7 @@ HashMap::HashMap() {
 }
 
 
-void HashMap::get(int taxa, const void * seed,node * output) {
+void HashMap::get(int taxa, const void * seed,node * &output) {
 	int hash = (taxa% TABLE_SIZE);
 	while (table[hash] != NULL && table[hash]->getTaxa() != taxa){
 		hash = (hash+1)% TABLE_SIZE; // re-hash
@@ -307,7 +308,7 @@ void HashMap::Initialize(char * file) {
 			infile.get(num_seeds, buffer_size, '\n'); 
 			counter ++;
 			//if(counter<5) cout<<atoi(taxa)<<": "<<atoi(num_seeds)<<endl;
-			addTax(atoi(taxa),atoi(num_seeds));
+			this->addTax(atoi(taxa),atoi(num_seeds));
 		}
 		  
 		

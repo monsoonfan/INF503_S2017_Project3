@@ -106,7 +106,7 @@ unsigned int Word::write(int s, char * buffer)
 			else {
 				index++;
 			}
-			buffer[index] = array[index];
+			buffer[i] = array[index];
 		}
 		if (DEBUG && debug) cout << endl;
 		return 1;

@@ -27,11 +27,11 @@ class node {
 class SeedEntry {
 	private:
 		unsigned int value; // this is the hashed value of this seed
-		node * head = new node; // the list of locations where this seed present
+		node * head; // the list of locations where this seed present
 		
 	public:
 		
-		SeedEntry(){}
+		SeedEntry(){head = new node;}
 		SeedEntry(unsigned int,int); // input: seed value and the first occurred location
 		unsigned int getSeed();
 		void addLocation(int);

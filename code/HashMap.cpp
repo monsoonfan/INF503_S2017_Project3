@@ -65,6 +65,7 @@ unsigned int MurmurHash2 ( const void * key, int len, unsigned int seed )
 } 
 
 SeedEntry::SeedEntry(unsigned int value,int loc0){
+	head = new node;
 	this->value = value;
 	(this->head)->location = loc0;
 	(this->head)->next = NULL;

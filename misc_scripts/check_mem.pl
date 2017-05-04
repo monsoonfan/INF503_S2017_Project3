@@ -29,6 +29,7 @@ my $timeout = $ARGV[1];
 
 # Variables
 my $pID;
+my $uID;
 my $run = 1;
 my $vmsize;
 my $vmpeak;
@@ -40,14 +41,15 @@ my @lines = `ps -ef | grep $job_tag`;
 foreach my $line (@lines) {
     next if ($line =~ m/perl/);
     next if ($line =~ m/grep/);
-    if ($line =~ m/^rmr5\s+(\d+)\s+/) {
-	$pID = $1;
+    if ($line =~ m/^(\S+)\s+(\d+)\s+/) {
+	$uID = $1;
+	$pID = $2;
     } else {
 	die "Could not find pID within $line";
     }
 }
 
-print "Found $pID\n";
+print "Found $pID for user $uID\n";
 
 # Infinite loop, will run until script is killed
 while ($run) {

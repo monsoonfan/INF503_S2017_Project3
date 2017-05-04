@@ -7,6 +7,6 @@ class FileReader
 public:
 	FileReader();
 	~FileReader();
-	int ReadSubjects(char *, char *, int, HashMap *);
+	int ReadSubjects(char *, char *, unsigned int, HashMap *);
 	int ReadQueries(char *, char *, int);
 };

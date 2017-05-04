@@ -36,7 +36,7 @@ int main(int argc, char * argv[]) {
   }
   char * subject_file = argv[1];
   char * query_file = argv[2];
-  int num_bases = atoi(argv[3]);
+  unsigned int num_bases = atoi(argv[3]);
   char * output_file = argv[4];
   char * statistic = argv[5];
   if (strcmp(subject_file, output_file) == 0) {cerr << "ERROR: input and output file names the same!" << endl ; return EXIT_FAILURE;}
@@ -46,7 +46,7 @@ int main(int argc, char * argv[]) {
   // Variables for main
   int extra_bases = 25000;
   //int num_queries = 961710;
-  int num_queries = num_bases;
+  unsigned int num_queries = num_bases;
   int num_mers_per_query = 100;
   char * subject_data = new char[num_bases + extra_bases];
   char * query_data = new char[num_queries * num_mers_per_query + 1];

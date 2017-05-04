@@ -5,6 +5,9 @@
 #include <iostream>
 #include <fstream>
 
+#define READ_STATUS_LINES 1000000
+#define READ_STATUS_BASES 10000000
+
 using namespace std;
 
 /*----------------------------------------------------------------------
@@ -67,7 +70,7 @@ Combine N number of bases from multiple genomic sequences into a single sequence
 - read header information 
 
 */
-int FileReader::ReadSubjects(char * file, char * values, int num_bases_to_read, HashMap * map)
+int FileReader::ReadSubjects(char * file, char * values, unsigned int num_bases_to_read, HashMap * map)
 {
   cout << "Reading " << num_bases_to_read << " bases of FASTA file ..." << file << endl ;
 
@@ -140,6 +143,7 @@ int FileReader::ReadSubjects(char * file, char * values, int num_bases_to_read, 
 	start_index = char_count;
 	gi_count++;
 	line_count++;
+	if ((line_count % READ_STATUS_LINES) == 0) cout << "Info: " << line_count << " lines so far..." << endl;
 	continue;
       }
 
@@ -179,6 +183,9 @@ int FileReader::ReadSubjects(char * file, char * values, int num_bases_to_read, 
       end_index++;
       
       if (dbg) cout << c ;
+
+      // Some logfile info
+      if ((char_count % READ_STATUS_BASES) == 0) cout << "  " << char_count << " bases..." << endl;
   
     }
 

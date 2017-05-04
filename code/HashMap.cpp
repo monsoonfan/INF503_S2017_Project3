@@ -9,7 +9,7 @@ const int TABLE_SIZE = 26500;
 const int seed_len = 16;
 const unsigned int hash_seed= 1481986944;
 
-const bool debug = true;
+const bool debug = false;
 
 using namespace std;
 
@@ -265,8 +265,8 @@ void HashMap::addSeed(int taxa, const void * seed,int location) {
 	if (table[hash] != NULL) {
 		table[hash]->putSeed(taxa,seed,location);
 		
-		cout<<"addSeed:"<<taxa<<": ";
-		printf("%s \n",seed);
+		if(debug) cout<<"addSeed:"<<taxa<<": ";
+		if(debug) printf("%s \n",seed);
 	}
 	else{
 		//table[hash] = new HashEntry(taxa,0);

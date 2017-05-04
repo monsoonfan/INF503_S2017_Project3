@@ -55,8 +55,8 @@ int main(int argc, char * argv[]) {
   //start tesing hash table
   
 
-  HashMap * Map = new HashMap;
-  Map->Initialize(statistic);
+    HashMap * Map = new HashMap;
+    Map->Initialize(statistic);
   /*
   //Map->addTax(449400,10);// just for test, it's the first taxID we have 
   //Map->addTax(1714570,4);

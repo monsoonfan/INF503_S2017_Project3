@@ -27,7 +27,7 @@ class node {
 class SeedEntry {
 	private:
 		unsigned int value; // this is the hashed value of this seed
-		node * head; // the list of locations where this seed present
+		node * head = new node; // the list of locations where this seed present
 		
 	public:
 		

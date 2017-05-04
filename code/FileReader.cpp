@@ -92,8 +92,6 @@ int FileReader::ReadSubjects(char * file, char * values, int num_bases_to_read, 
   int end_index = 0;
   char * write_buffer = new char[word_size];
   int store_return = 0;
-  const int base = 10;
-  char * endptr;
   int val;
 
   ifstream infile(file);
@@ -152,16 +150,12 @@ int FileReader::ReadSubjects(char * file, char * values, int num_bases_to_read, 
       }
 
       // Store a word here after reading a char, this will store only if the word is full
-      cout << "\nDBG: storing c " << c << endl;
+      if (dbg) cout << "\nDBG: storing c " << c << endl;
       store_return = word.store(c, write_buffer);
-      cout << "DBG: write_buffer: " << write_buffer << endl;
+      if (dbg) cout << "DBG: write_buffer: " << write_buffer << endl;
       if (store_return) {
-	// map->addSeed(static_cast<int>(tax_id), write_buffer, char_count); // doesn't compile
-	// val = strtol(write_buffer, &endptr, base); // this give 0 for everything at first try
-	
-	//val = atoi(write_buffer); // 0 value
 	val = atoi(tax_id);
-	cout << "DBG:  val = " << val << " from tax_id: " << tax_id << endl;
+	if (dbg) cout << "DBG:  val = " << val << " from tax_id: " << tax_id << endl;
 	map->addSeed(val, write_buffer, char_count); // doesn't compile
       }
       num_words += store_return;

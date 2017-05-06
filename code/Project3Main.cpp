@@ -31,7 +31,7 @@ int main(int argc, char * argv[]) {
   cout << "--------------------------------------------------" << endl ;
 
   // Error checking and processing of inputs
-  if (argc != 6) {
+  if (argc != 7) {
     help();
     return(EXIT_FAILURE);
   }
@@ -40,6 +40,7 @@ int main(int argc, char * argv[]) {
   long int num_bases = atol(argv[3]);
   char * output_file = argv[4];
   char * statistic = argv[5];
+  char * query_sizes = argv[6];
   if (strcmp(subject_file, output_file) == 0) {cerr << "ERROR: input and output file names the same!" << endl ; return EXIT_FAILURE;}
   if (access(subject_file, F_OK) == -1) {cerr << "ERROR: Can't open file " << subject_file << endl ; return EXIT_FAILURE;}
   if (access(query_file, F_OK) == -1) {cerr << "ERROR: Can't open file " << query_file << endl ; return EXIT_FAILURE;}
@@ -47,25 +48,26 @@ int main(int argc, char * argv[]) {
 
   // Variables for main
   long int extra_bases = 25000;
-  //int num_queries = 961710;
-  long num_queries = num_bases;
+  int num_queries = 20; // 961710 total, only 20 for testing
   int num_mers_per_query = 100;
   printf ("creating new char array with %ld elements...\n",num_bases);
-  cout << "size_t: " << std::size_t << endl;
   char * subject_data = new char[num_bases + extra_bases];
-  //char * query_data = new char[num_queries * num_mers_per_query + 1];
+  char * query_data = new char[num_queries * num_mers_per_query + 1];
   
   // Read the input data
+  FileReader fr;
   HashMap * subject_map = new HashMap;
   subject_map->Initialize(statistic);
-  FileReader fr;
   fr.ReadSubjects(subject_file, subject_data, num_bases, subject_map);
-  //  fr.ReadQueries(query_file, query_data, num_queries);
+
+  HashMap * query_map = new HashMap;
+  query_map->Initialize(query_sizes);
+  fr.ReadQueries(query_file, query_data, num_queries, query_map);
   
   // Process the queries against the subjects
 
   // Successful exit with cleanup
   delete[] subject_data;
-  //delete[] query_data;
+  delete[] query_data;
   return(EXIT_SUCCESS);
 }

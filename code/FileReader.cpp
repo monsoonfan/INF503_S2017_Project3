@@ -97,6 +97,7 @@ int FileReader::ReadSubjects(char * file, char * values, long int num_bases_to_r
   int store_return = 0;
   int val;
 
+  bool stop_info = true;
   bool read_status = true;
   ifstream infile(file);
   
@@ -110,7 +111,10 @@ int FileReader::ReadSubjects(char * file, char * values, long int num_bases_to_r
 
       // Stop reading after this sequence if..
       if (char_count >= num_bases_to_read) {
-	cout << "Reached " << num_bases_to_read << " bases read, stopping at end of current sequence" << endl;
+	if (stop_info) {
+	  cout << "Reached " << num_bases_to_read << " bases read, stopping at end of current sequence" << endl;
+	  stop_info = false;
+	}
 	stop_next_header = true;
       }
 
@@ -219,7 +223,7 @@ int FileReader::ReadSubjects(char * file, char * values, long int num_bases_to_r
 Method to read genomic sequence fragments from a file into a hash table
  
 */
-int FileReader::ReadQueries(char * file, char * values, int num_queries_to_read)
+int FileReader::ReadQueries(char * file, char * values, int num_queries_to_read, HashMap * map)
 {
   cout << "Reading " << num_queries_to_read << " queries of FASTA file ..." << file << endl ;
 
@@ -239,6 +243,9 @@ int FileReader::ReadQueries(char * file, char * values, int num_queries_to_read)
   int num_seeds = 0; // per taxID
   int start_index = 0;
   int end_index = 0;
+  char * write_buffer = new char[seed_size];
+  int store_return = 0;
+  int val;
   
   ifstream infile(file);
   
@@ -289,7 +296,15 @@ int FileReader::ReadQueries(char * file, char * values, int num_queries_to_read)
       }
 
       // Store a word here after reading a char, this will store only if the word is full
-      //num_seeds = num_seeds + seed.store(c);
+      if (dbg) cout << "\nDBG: storing c " << c << endl;
+      store_return = seed.store(c, write_buffer);
+      if (dbg) cout << "DBG: write_buffer: " << write_buffer << endl;
+      if (store_return) {
+	val = atoi(read_id);
+	if (dbg) cout << "DBG:  val = " << val << " from read_id: " << read_id << endl;
+	map->addSeed(val, write_buffer, char_count); // doesn't compile
+      }
+      num_seeds += store_return;
       //cout << num_seeds << endl;;
 
       // Fail safe in case of broken file

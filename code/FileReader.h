@@ -8,5 +8,5 @@ public:
 	FileReader();
 	~FileReader();
 	int ReadSubjects(char *, char *, long int, HashMap *);
-	int ReadQueries(char *, char *, int);
+	int ReadQueries(char *, char *, int, HashMap *);
 };

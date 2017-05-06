@@ -44,6 +44,7 @@ int main(int argc, char * argv[]) {
   if (access(subject_file, F_OK) == -1) {cerr << "ERROR: Can't open file " << subject_file << endl ; return EXIT_FAILURE;}
   if (access(query_file, F_OK) == -1) {cerr << "ERROR: Can't open file " << query_file << endl ; return EXIT_FAILURE;}
   if (access(statistic, F_OK) == -1) {cerr << "ERROR: Can't open file " << statistic << endl ; return EXIT_FAILURE;}
+
   // Variables for main
   int extra_bases = 25000;
   //int num_queries = 961710;
@@ -51,13 +52,15 @@ int main(int argc, char * argv[]) {
   int num_mers_per_query = 100;
   char * subject_data = new char[num_bases + extra_bases];
   char * query_data = new char[num_queries * num_mers_per_query + 1];
-
+  
   // Read the input data
-    HashMap * subject_map = new HashMap;
-    Map->Initialize(statistic);
-    FileReader fr;
-    fr.ReadSubjects(subject_file, subject_data, num_bases, subject_map);
+  HashMap * subject_map = new HashMap;
+  subject_map->Initialize(statistic);
+  FileReader fr;
+  fr.ReadSubjects(subject_file, subject_data, num_bases, subject_map);
   //  fr.ReadQueries(query_file, query_data, num_queries);
+  
+  // Process the queries against the subjects
 
   // Successful exit with cleanup
   delete[] subject_data;

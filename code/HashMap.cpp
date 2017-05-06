@@ -135,9 +135,9 @@ SeedEntry::~SeedEntry(){
 
 ///////////////////////////////////////////
 
-HashEntry::HashEntry(int taxa, int size){
+HashEntry::HashEntry(int taxa, int size, int load_multiplier){
 	this->taxa = taxa;
-	locTable = new SeedEntry * [size];
+	locTable = new SeedEntry * [size * load_multiplier];
 	for (int i=0; i<size;i++) locTable[i] = NULL;
 	this->size= size;
 }
@@ -242,7 +242,7 @@ void HashMap::get(int taxa, const void * seed,node * &output) {
 	}
 }
 
-void HashMap::addTax(int taxa, int size){
+void HashMap::addTax(int taxa, int size, int load_multiplier){
 	int hash = (taxa% TABLE_SIZE);
 	while (table[hash] != NULL && table[hash]->getTaxa() != taxa){
 		hash = (hash+1)% TABLE_SIZE; // re-hash
@@ -251,7 +251,7 @@ void HashMap::addTax(int taxa, int size){
 		delete table[hash];
 		cout<<"deleting this HashEntry: "<<taxa<<endl;
 	}
-	table[hash] = new HashEntry(taxa,size);
+	table[hash] = new HashEntry(taxa,size,load_multiplier);
 	//cout<<" HashEntry: "<<taxa<<endl;
 }
 
@@ -275,7 +275,7 @@ void HashMap::addSeed(int taxa, const void * seed,int location) {
 	}
 }
 
-void HashMap::Initialize(char * file) {
+void HashMap::Initialize(char * file, int load_multiplier) {
 	ifstream infile(file);
 	int buffer_size = 100;
 	char c;
@@ -309,7 +309,7 @@ void HashMap::Initialize(char * file) {
 			infile.get(num_seeds, buffer_size, '\n'); 
 			counter ++;
 			//if(counter<5) cout<<atoi(taxa)<<": "<<atoi(num_seeds)<<endl;
-			this->addTax(atoi(taxa),atoi(num_seeds));
+			this->addTax(atoi(taxa),atoi(num_seeds),load_multiplier);
 		}
 		  
 		

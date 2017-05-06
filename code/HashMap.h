@@ -50,7 +50,7 @@ class HashEntry {
 	 	
 	public:
 		
-		HashEntry(int, int); // input: taxID, size of this taxID
+		HashEntry(int, int, int); // input: taxID, size of this taxID
 		void putSeed(int, const void *,int); // input taxID, seed string, location of this seed
 		int getTaxa();
 		void getLocations(int, const void *,node *&);
@@ -65,9 +65,9 @@ class HashMap{
 	public:
 		HashMap();
 		void get(int, const void *,node *&); // input: taxID, seed, output pointer
-		void addTax(int,int); // input: taxaID, size of it
+		void addTax(int,int,int); // input: taxaID, size of it
 		void addSeed(int, const void *,int); // input taxID, seed string, location of this seed
-		void Initialize(char *);
+		void Initialize(char *,int);
 		~HashMap();
 };
 

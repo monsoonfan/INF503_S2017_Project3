@@ -166,7 +166,7 @@ int FileReader::ReadSubjects(char * file, char * values, long int num_bases_to_r
       if (store_return) {
 	val = atoi(tax_id);
 	if (dbg) cout << "DBG:  val = " << val << " from tax_id: " << tax_id << endl;
-	//map->addSeed(val, write_buffer, char_count); // doesn't compile
+	map->addSeed(val, write_buffer, char_count);
       }
       num_words += store_return;
       //cout << num_words << endl;;

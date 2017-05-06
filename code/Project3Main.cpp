@@ -31,7 +31,7 @@ int main(int argc, char * argv[]) {
   cout << "--------------------------------------------------" << endl ;
 
   // Error checking and processing of inputs
-  if (argc != 7) {
+  if (argc != 8) {
     help();
     return(EXIT_FAILURE);
   }
@@ -41,6 +41,7 @@ int main(int argc, char * argv[]) {
   char * output_file = argv[4];
   char * statistic = argv[5];
   char * query_sizes = argv[6];
+  int load_multiplier = atoi(argv[7]);
   if (strcmp(subject_file, output_file) == 0) {cerr << "ERROR: input and output file names the same!" << endl ; return EXIT_FAILURE;}
   if (access(subject_file, F_OK) == -1) {cerr << "ERROR: Can't open file " << subject_file << endl ; return EXIT_FAILURE;}
   if (access(query_file, F_OK) == -1) {cerr << "ERROR: Can't open file " << query_file << endl ; return EXIT_FAILURE;}
@@ -50,18 +51,19 @@ int main(int argc, char * argv[]) {
   long int extra_bases = 25000;
   int num_queries = 20; // 961710 total, only 20 for testing
   int num_mers_per_query = 100;
-  printf ("creating new char array with %ld elements...\n",num_bases);
+
+  // Create char arrays for the continious, stringed-together data
   char * subject_data = new char[num_bases + extra_bases];
   char * query_data = new char[num_queries * num_mers_per_query + 1];
   
   // Read the input data
   FileReader fr;
   HashMap * subject_map = new HashMap;
-  subject_map->Initialize(statistic);
+  subject_map->Initialize(statistic, load_multiplier);
   fr.ReadSubjects(subject_file, subject_data, num_bases, subject_map);
 
   HashMap * query_map = new HashMap;
-  query_map->Initialize(query_sizes);
+  query_map->Initialize(query_sizes, load_multiplier);
   fr.ReadQueries(query_file, query_data, num_queries, query_map);
   
   // Process the queries against the subjects
@@ -69,5 +71,8 @@ int main(int argc, char * argv[]) {
   // Successful exit with cleanup
   delete[] subject_data;
   delete[] query_data;
+  //delete subject_map; // TODO - uncomment once the HashMap destructor is fixed
+  //delete query_map;
+
   return(EXIT_SUCCESS);
 }

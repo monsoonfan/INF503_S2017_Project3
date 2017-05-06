@@ -70,7 +70,7 @@ Combine N number of bases from multiple genomic sequences into a single sequence
 - read header information 
 
 */
-int FileReader::ReadSubjects(char * file, char * values, unsigned int num_bases_to_read, HashMap * map)
+int FileReader::ReadSubjects(char * file, char * values, long int num_bases_to_read, HashMap * map)
 {
   cout << "Reading " << num_bases_to_read << " bases of FASTA file ..." << file << endl ;
 
@@ -97,6 +97,7 @@ int FileReader::ReadSubjects(char * file, char * values, unsigned int num_bases_
   int store_return = 0;
   int val;
 
+  bool read_status = true;
   ifstream infile(file);
   
   if (! infile) {
@@ -109,6 +110,7 @@ int FileReader::ReadSubjects(char * file, char * values, unsigned int num_bases_
 
       // Stop reading after this sequence if..
       if (char_count >= num_bases_to_read) {
+	cout << "Reached " << num_bases_to_read << " bases read, stopping at end of current sequence" << endl;
 	stop_next_header = true;
       }
 
@@ -143,7 +145,7 @@ int FileReader::ReadSubjects(char * file, char * values, unsigned int num_bases_
 	start_index = char_count;
 	gi_count++;
 	line_count++;
-	if ((line_count % READ_STATUS_LINES) == 0) cout << "Info: " << line_count << " lines so far..." << endl;
+	read_status = true;
 	continue;
       }
 
@@ -160,7 +162,7 @@ int FileReader::ReadSubjects(char * file, char * values, unsigned int num_bases_
       if (store_return) {
 	val = atoi(tax_id);
 	if (dbg) cout << "DBG:  val = " << val << " from tax_id: " << tax_id << endl;
-	map->addSeed(val, write_buffer, char_count); // doesn't compile
+	//map->addSeed(val, write_buffer, char_count); // doesn't compile
       }
       num_words += store_return;
       //cout << num_words << endl;;
@@ -186,7 +188,11 @@ int FileReader::ReadSubjects(char * file, char * values, unsigned int num_bases_
 
       // Some logfile info
       if ((char_count % READ_STATUS_BASES) == 0) cout << "  " << char_count << " bases..." << endl;
-  
+      if ((line_count % READ_STATUS_LINES) == 0 && read_status) {
+	cout << "Info: " << line_count << " lines so far..." << endl;
+	read_status = false;
+      }
+
     }
 
   // Clean up

@@ -37,7 +37,7 @@ int main(int argc, char * argv[]) {
   }
   char * subject_file = argv[1];
   char * query_file = argv[2];
-  unsigned int num_bases = atoi(argv[3]);
+  long int num_bases = atol(argv[3]);
   char * output_file = argv[4];
   char * statistic = argv[5];
   if (strcmp(subject_file, output_file) == 0) {cerr << "ERROR: input and output file names the same!" << endl ; return EXIT_FAILURE;}
@@ -46,12 +46,14 @@ int main(int argc, char * argv[]) {
   if (access(statistic, F_OK) == -1) {cerr << "ERROR: Can't open file " << statistic << endl ; return EXIT_FAILURE;}
 
   // Variables for main
-  int extra_bases = 25000;
+  long int extra_bases = 25000;
   //int num_queries = 961710;
-  unsigned int num_queries = num_bases;
+  long num_queries = num_bases;
   int num_mers_per_query = 100;
+  printf ("creating new char array with %ld elements...\n",num_bases);
+  cout << "size_t: " << std::size_t << endl;
   char * subject_data = new char[num_bases + extra_bases];
-  char * query_data = new char[num_queries * num_mers_per_query + 1];
+  //char * query_data = new char[num_queries * num_mers_per_query + 1];
   
   // Read the input data
   HashMap * subject_map = new HashMap;
@@ -64,6 +66,6 @@ int main(int argc, char * argv[]) {
 
   // Successful exit with cleanup
   delete[] subject_data;
-  delete[] query_data;
+  //delete[] query_data;
   return(EXIT_SUCCESS);
 }

@@ -117,17 +117,15 @@ void SeedEntry::print(){
 
 
 SeedEntry::~SeedEntry(){
-	node * temp;
-	node * prev;
-	temp = head;
-	prev = head;
-	while( temp->next!=NULL)
+    node * temp;
+    node * prev = head;
+    while( prev!=NULL)
     {
-        temp = temp->next;
-        free(prev);
+        temp = prev->next;
+        delete prev;
         prev = temp;
     }
-   free(temp);
+    delete temp;
 }
 
 
@@ -251,7 +249,7 @@ void HashMap::addTax(int taxa, int size){
 		delete table[hash];
 		cout<<"deleting this HashEntry: "<<taxa<<endl;
 	}
-	table[hash] = new HashEntry(taxa,size);
+	table[hash] = new HashEntry(taxa,2*size);
 	//cout<<" HashEntry: "<<taxa<<endl;
 }
 
@@ -298,9 +296,26 @@ void HashMap::Initialize(char * file) {
 		 }
 
 		if (c != ' '){
-			taxa[0] = c;
-			infile.get(&taxa[1], buffer_size-1, ':');
+			char * taxa= new char[buffer_size];
+			//taxa[0] = c;
+			int digit = 0;
+			while(c != ':'){
+				taxa[digit] = c;
+				digit++;
+				infile.get(c);
+			}
+			/*infile.get(&taxa[1], buffer_size-1, ':');
+			cout<<taxa[0]<<taxa[1]<<endl;
+			if(taxa[1] == NULL){
+				cout<<"!!!";
+				while(c!=':'){
+				infile.get(c);
+				cout<<c<<endl;
+				}			
+			} 
 			infile.get(c);
+			cout<<c<<endl;
+			*/
 			if (c != ':') {
 				 cout << "ERROR: bad data on line " << line_count << endl;
 				break;
@@ -308,8 +323,9 @@ void HashMap::Initialize(char * file) {
 			infile.get(c);
 			infile.get(num_seeds, buffer_size, '\n'); 
 			counter ++;
-			//if(counter<5) cout<<atoi(taxa)<<": "<<atoi(num_seeds)<<endl;
+			if(counter<10) cout<<atoi(taxa)<<": "<<atoi(num_seeds)<<endl;
 			this->addTax(atoi(taxa),atoi(num_seeds));
+			delete[] taxa;
 		}
 		  
 		

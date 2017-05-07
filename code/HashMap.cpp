@@ -117,17 +117,15 @@ void SeedEntry::print(){
 
 
 SeedEntry::~SeedEntry(){
-	node * temp;
-	node * prev;
-	temp = head;
-	prev = head;
-	while( temp->next!=NULL)
+    node * temp;
+    node * prev = head;
+    while( prev!=NULL)
     {
-        temp = temp->next;
-        free(prev);
+        temp = prev->next;
+        delete prev;
         prev = temp;
     }
-   free(temp);
+    delete temp;
 }
 
 

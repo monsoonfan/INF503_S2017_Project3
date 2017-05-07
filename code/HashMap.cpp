@@ -298,9 +298,15 @@ void HashMap::Initialize(char * file, int load_multiplier) {
 		 }
 
 		if (c != ' '){
-			taxa[0] = c;
-			infile.get(&taxa[1], buffer_size-1, ':');
-			infile.get(c);
+			char * taxa= new char[buffer_size];
+			//taxa[0] = c;
+			int digit = 0;
+			while(c != ':'){
+				taxa[digit] = c;
+				digit++;
+				infile.get(c);
+			}
+
 			if (c != ':') {
 				 cout << "ERROR: bad data on line " << line_count << endl;
 				break;
@@ -308,8 +314,9 @@ void HashMap::Initialize(char * file, int load_multiplier) {
 			infile.get(c);
 			infile.get(num_seeds, buffer_size, '\n'); 
 			counter ++;
-			//if(counter<5) cout<<atoi(taxa)<<": "<<atoi(num_seeds)<<endl;
-			this->addTax(atoi(taxa),atoi(num_seeds),load_multiplier);
+			if(counter<10) cout<<atoi(taxa)<<": "<<atoi(num_seeds)<<endl;
+			this->addTax(atoi(taxa),atoi(num_seeds));
+			delete[] taxa;
 		}
 		  
 		

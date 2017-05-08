@@ -62,59 +62,17 @@ int main(int argc, char * argv[]) {
   subject_map->Initialize(statistic, load_multiplier);
   fr.ReadSubjects(subject_file, subject_data, num_bases, subject_map);
 
-<<<<<<< HEAD
-    HashMap * Map = new HashMap;
-    Map->Initialize(statistic);
-    delete Map;
-  /*
-  //Map->addTax(449400,10);// just for test, it's the first taxID we have 
-  //Map->addTax(1714570,4);
-  cout<<"starting adding seeds"<<endl;
-  // Map->addLocation(<seed_num>,"SEED",<int: start_loc>)
-
-  //const char * test_string = "ACGGTAGCTGCTGAGT"; // this works, but not sure how to generate this from the Word class
-  char test_string[16];
-  for (int i = 0; i < 16; i++) {
-    test_string[i] = 'A';
-  }
-  //Map->addSeed(663559,"ACGGTAGCTGCTGAGT",8);
-  Map->addSeed(663559,test_string,8);
-
-  node *head = new node;
-  //Map->get(169865,"ACGGTAGCTGCTGAGT",head);
-  //Map->get(169865,test_string,head);
-  //char * test_string = "
-  /*
-  Map->addSeed(663559,"ACGGTAGCTGCTGAGT",15);
-  Map->addSeed(663559,"ACGGTAGCTGCTGAGT",25);
-  Map->addSeed(169865,"ACGGTAGCTGCTGAGT",5);
-  
-  cout<<"end adding seeds"<<endl;
-  Map->get(169865,"ACGGTAGCTGCTGAGT",head);
-  cout<<head->location;
-  //printList(head);
-  //cout<<Map->get(449400,0)<<endl;
-  //cout<<Map->get(31600,0)<<endl;
-  //end 
-  */
-  
-/*  FileReader fr;
-  cout << "DBG reading subjects..." << endl;
-  fr.ReadSubjects(subject_file, subject_data, num_bases, Map);
-  //  fr.ReadQueries(query_file, query_data, num_queries);
-=======
   HashMap * query_map = new HashMap;
   query_map->Initialize(query_sizes, load_multiplier);
   fr.ReadQueries(query_file, query_data, num_queries, query_map);
   
   // Process the queries against the subjects
->>>>>>> db0604a79b1d9900c90e7075a5228d1357650bbc
 
   // Successful exit with cleanup
   delete[] subject_data;
   delete[] query_data;
   //delete subject_map; // TODO - uncomment once the HashMap destructor is fixed
   //delete query_map;
-*/
+
   return(EXIT_SUCCESS);
 }

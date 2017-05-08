@@ -251,11 +251,7 @@ void HashMap::addTax(int taxa, int size, int load_multiplier){
 		delete table[hash];
 		cout<<"deleting this HashEntry: "<<taxa<<endl;
 	}
-<<<<<<< HEAD
-	table[hash] = new HashEntry(taxa,2*size);
-=======
 	table[hash] = new HashEntry(taxa,size,load_multiplier);
->>>>>>> db0604a79b1d9900c90e7075a5228d1357650bbc
 	//cout<<" HashEntry: "<<taxa<<endl;
 }
 
@@ -318,8 +314,8 @@ void HashMap::Initialize(char * file, int load_multiplier) {
 			infile.get(c);
 			infile.get(num_seeds, buffer_size, '\n'); 
 			counter ++;
-			if(counter<10) cout<<atoi(taxa)<<": "<<atoi(num_seeds)<<endl;
-			this->addTax(atoi(taxa),atoi(num_seeds));
+			if(counter<10 && debug) cout<<atoi(taxa)<<": "<<atoi(num_seeds)<<endl;
+			this->addTax(atoi(taxa),atoi(num_seeds), load_multiplier);
 			delete[] taxa;
 		}
 		  

@@ -57,6 +57,7 @@ int main(int argc, char * argv[]) {
 
     HashMap * Map = new HashMap;
     Map->Initialize(statistic);
+    delete Map;
   /*
   //Map->addTax(449400,10);// just for test, it's the first taxID we have 
   //Map->addTax(1714570,4);
@@ -89,7 +90,6 @@ int main(int argc, char * argv[]) {
   //end 
   */
   
-
   FileReader fr;
   cout << "DBG reading subjects..." << endl;
   fr.ReadSubjects(subject_file, subject_data, num_bases, Map);

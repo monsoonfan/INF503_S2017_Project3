@@ -304,18 +304,7 @@ void HashMap::Initialize(char * file) {
 				digit++;
 				infile.get(c);
 			}
-			/*infile.get(&taxa[1], buffer_size-1, ':');
-			cout<<taxa[0]<<taxa[1]<<endl;
-			if(taxa[1] == NULL){
-				cout<<"!!!";
-				while(c!=':'){
-				infile.get(c);
-				cout<<c<<endl;
-				}			
-			} 
-			infile.get(c);
-			cout<<c<<endl;
-			*/
+
 			if (c != ':') {
 				 cout << "ERROR: bad data on line " << line_count << endl;
 				break;

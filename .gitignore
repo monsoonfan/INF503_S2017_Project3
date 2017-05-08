@@ -1,7 +1,9 @@
 docs/~$oject3.docx
 *~
 code/Project3
+data/TableSize_test0506.txt
 code/*.exe
+code/Makefile
 code/*.tmp
 code/TableSize.txt
 */*log

@@ -3,7 +3,7 @@
 #SBATCH --output=/scratch/rmr5/project/test_virus_reads.log
 #SBATCH --time=24:00:00
 #SBATCH --workdir=/scratch/rmr5/project
-#SBATCH --mem=60000
+#SBATCH --mem=600000
 
 # load a module, for example
 module load gcc/6.2.0

@@ -70,7 +70,7 @@ Combine N number of bases from multiple genomic sequences into a single sequence
 - read header information 
 
 */
-int FileReader::ReadSubjects(char * file, char * values, unsigned int num_bases_to_read, HashMap * map)
+int FileReader::ReadSubjects(char * file, char * values, long int num_bases_to_read, HashMap * map)
 {
   cout << "Reading " << num_bases_to_read << " bases of FASTA file ..." << file << endl ;
 
@@ -97,6 +97,8 @@ int FileReader::ReadSubjects(char * file, char * values, unsigned int num_bases_
   int store_return = 0;
   int val;
 
+  bool stop_info = true;
+  bool read_status = true;
   ifstream infile(file);
   
   if (! infile) {
@@ -109,6 +111,10 @@ int FileReader::ReadSubjects(char * file, char * values, unsigned int num_bases_
 
       // Stop reading after this sequence if..
       if (char_count >= num_bases_to_read) {
+	if (stop_info) {
+	  cout << "Reached " << num_bases_to_read << " bases read, stopping at end of current sequence" << endl;
+	  stop_info = false;
+	}
 	stop_next_header = true;
       }
 
@@ -143,7 +149,7 @@ int FileReader::ReadSubjects(char * file, char * values, unsigned int num_bases_
 	start_index = char_count;
 	gi_count++;
 	line_count++;
-	if ((line_count % READ_STATUS_LINES) == 0) cout << "Info: " << line_count << " lines so far..." << endl;
+	read_status = true;
 	continue;
       }
 
@@ -160,7 +166,7 @@ int FileReader::ReadSubjects(char * file, char * values, unsigned int num_bases_
       if (store_return) {
 	val = atoi(tax_id);
 	if (dbg) cout << "DBG:  val = " << val << " from tax_id: " << tax_id << endl;
-	map->addSeed(val, write_buffer, char_count); // doesn't compile
+	map->addSeed(val, write_buffer, char_count);
       }
       num_words += store_return;
       //cout << num_words << endl;;
@@ -186,7 +192,11 @@ int FileReader::ReadSubjects(char * file, char * values, unsigned int num_bases_
 
       // Some logfile info
       if ((char_count % READ_STATUS_BASES) == 0) cout << "  " << char_count << " bases..." << endl;
-  
+      if ((line_count % READ_STATUS_LINES) == 0 && read_status) {
+	cout << "Info: " << line_count << " lines so far..." << endl;
+	read_status = false;
+      }
+
     }
 
   // Clean up
@@ -213,7 +223,7 @@ int FileReader::ReadSubjects(char * file, char * values, unsigned int num_bases_
 Method to read genomic sequence fragments from a file into a hash table
  
 */
-int FileReader::ReadQueries(char * file, char * values, int num_queries_to_read)
+int FileReader::ReadQueries(char * file, char * values, int num_queries_to_read, HashMap * map)
 {
   cout << "Reading " << num_queries_to_read << " queries of FASTA file ..." << file << endl ;
 
@@ -233,6 +243,9 @@ int FileReader::ReadQueries(char * file, char * values, int num_queries_to_read)
   int num_seeds = 0; // per taxID
   int start_index = 0;
   int end_index = 0;
+  char * write_buffer = new char[seed_size];
+  int store_return = 0;
+  int val;
   
   ifstream infile(file);
   
@@ -283,7 +296,15 @@ int FileReader::ReadQueries(char * file, char * values, int num_queries_to_read)
       }
 
       // Store a word here after reading a char, this will store only if the word is full
-      //num_seeds = num_seeds + seed.store(c);
+      if (dbg) cout << "\nDBG: storing c " << c << endl;
+      store_return = seed.store(c, write_buffer);
+      if (dbg) cout << "DBG: write_buffer: " << write_buffer << endl;
+      if (store_return) {
+	val = atoi(read_id);
+	if (dbg) cout << "DBG:  val = " << val << " from read_id: " << read_id << endl;
+	map->addSeed(val, write_buffer, char_count); // doesn't compile
+      }
+      num_seeds += store_return;
       //cout << num_seeds << endl;;
 
       // Fail safe in case of broken file

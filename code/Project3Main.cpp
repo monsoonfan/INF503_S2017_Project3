@@ -7,6 +7,7 @@
 #include "FileReader.h"
 #include "HashMap.h"
 #include "NeedlemanWunsch.h"
+//#include "ReadMatchTaxIDFunc.h"
 
 using namespace std;
 
@@ -30,31 +31,38 @@ int main(int argc, char * argv[]) {
   cout << "--------------------------------------------------" << endl ;
 
   // Error checking and processing of inputs
-  if (argc != 6) {
+  if (argc != 8) {
     help();
     return(EXIT_FAILURE);
   }
   char * subject_file = argv[1];
   char * query_file = argv[2];
-  unsigned int num_bases = atoi(argv[3]);
+  long int num_bases = atol(argv[3]);
   char * output_file = argv[4];
   char * statistic = argv[5];
+  char * query_sizes = argv[6];
+  int load_multiplier = atoi(argv[7]);
   if (strcmp(subject_file, output_file) == 0) {cerr << "ERROR: input and output file names the same!" << endl ; return EXIT_FAILURE;}
   if (access(subject_file, F_OK) == -1) {cerr << "ERROR: Can't open file " << subject_file << endl ; return EXIT_FAILURE;}
   if (access(query_file, F_OK) == -1) {cerr << "ERROR: Can't open file " << query_file << endl ; return EXIT_FAILURE;}
   if (access(statistic, F_OK) == -1) {cerr << "ERROR: Can't open file " << statistic << endl ; return EXIT_FAILURE;}
+
   // Variables for main
-  int extra_bases = 25000;
-  //int num_queries = 961710;
-  unsigned int num_queries = num_bases;
+  long int extra_bases = 25000;
+  int num_queries = 20; // 961710 total, only 20 for testing
   int num_mers_per_query = 100;
+
+  // Create char arrays for the continious, stringed-together data
   char * subject_data = new char[num_bases + extra_bases];
   char * query_data = new char[num_queries * num_mers_per_query + 1];
-
-  // Read the input data
-  //start tesing hash table
   
+  // Read the input data
+  FileReader fr;
+  HashMap * subject_map = new HashMap;
+  subject_map->Initialize(statistic, load_multiplier);
+  fr.ReadSubjects(subject_file, subject_data, num_bases, subject_map);
 
+<<<<<<< HEAD
     HashMap * Map = new HashMap;
     Map->Initialize(statistic);
     delete Map;
@@ -90,13 +98,23 @@ int main(int argc, char * argv[]) {
   //end 
   */
   
-  FileReader fr;
+/*  FileReader fr;
   cout << "DBG reading subjects..." << endl;
   fr.ReadSubjects(subject_file, subject_data, num_bases, Map);
   //  fr.ReadQueries(query_file, query_data, num_queries);
+=======
+  HashMap * query_map = new HashMap;
+  query_map->Initialize(query_sizes, load_multiplier);
+  fr.ReadQueries(query_file, query_data, num_queries, query_map);
+  
+  // Process the queries against the subjects
+>>>>>>> db0604a79b1d9900c90e7075a5228d1357650bbc
 
   // Successful exit with cleanup
   delete[] subject_data;
   delete[] query_data;
+  //delete subject_map; // TODO - uncomment once the HashMap destructor is fixed
+  //delete query_map;
+*/
   return(EXIT_SUCCESS);
 }

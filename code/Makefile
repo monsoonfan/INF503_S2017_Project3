@@ -3,13 +3,16 @@ build:
 	g++ -o Project3 stdafx.cpp FileReader.cpp HashMap.cpp Word.cpp Project3Main.cpp
 
 build_and_run: build
-	./Project3 /common/contrib/classroom/inf503/project_3/small_test/viral_seqs.fasta /common/contrib/classroom/inf503/project_3/small_test/test_reads.fasta 5000 test.out ../data/TableSizeViruses.txt
+	./Project3 /common/contrib/classroom/inf503/project_3/small_test/viral_seqs.fasta /common/contrib/classroom/inf503/project_3/small_test/test_reads.fasta 5000 test.out ../data/TableSizeViruses.txt ../data/TableSizeQueries.txt 3
 
 run_v.%:
-	./Project3 /common/contrib/classroom/inf503/project_3/small_test/viral_seqs.fasta /common/contrib/classroom/inf503/project_3/small_test/test_reads.fasta $* test.out ../data/TableSizeViruses.txt
+	./Project3 /common/contrib/classroom/inf503/project_3/small_test/viral_seqs.fasta /common/contrib/classroom/inf503/project_3/small_test/test_reads.fasta $* test.out ../data/TableSizeViruses.txt ../data/TableSizeQueries.txt 3
 
 run_b.%:
-	./Project3 /common/contrib/classroom/inf503/project_3/large_test/bacterial_seqs.fasta /common/contrib/classroom/inf503/project_3/small_test/test_reads.fasta $* test.out ../data/TableSizeViruses.txt
+	./Project3 /common/contrib/classroom/inf503/project_3/large_test/bacterial_seqs.fasta /common/contrib/classroom/inf503/project_3/small_test/test_reads.fasta $* test.out ../data/TableSizeViruses.txt ../data/TableSizeQueries.txt 3
 
 br.%: build
-	./Project3 /common/contrib/classroom/inf503/project_3/small_test/viral_seqs.fasta /common/contrib/classroom/inf503/project_3/small_test/test_reads.fasta $* test.out ../data/TableSizeViruses.txt
+	./Project3 /common/contrib/classroom/inf503/project_3/small_test/viral_seqs.fasta /common/contrib/classroom/inf503/project_3/small_test/test_reads.fasta $* test.out ../data/TableSizeViruses.txt ../data/TableSizeQueries.txt 3
+
+test.%:
+	./Project3 /common/contrib/classroom/inf503/project_3/small_test/viral_seqs.fasta /common/contrib/classroom/inf503/project_3/small_test/test_reads.fasta $* test.out ../data/TableSizeSmall.txt ../data/TableSizeQueries.txt 3

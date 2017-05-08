@@ -57,10 +57,10 @@ while ($run) {
     my $vms = `grep VmSize /proc/$pID/status`;
     if ($vms =~ m/^VmSize\:\s+(\d+\s+\S+)\s*$/) {
 	$vmsize = $1;
-    } elsif ($vms =~ m/No such file/) {
+    } elsif ($vms eq "") {
 	$run = 0;
 	print "Final Run stats:\n";
-	&output();
+	die &output();
     } else {
 	print "ERROR: unknown error occurred, no pID or VmSize detected!\n";
 	&output();

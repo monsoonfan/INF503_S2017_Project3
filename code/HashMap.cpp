@@ -126,6 +126,7 @@ SeedEntry::~SeedEntry(){
         prev = temp;
     }
     delete temp;
+
 }
 
 
@@ -133,9 +134,9 @@ SeedEntry::~SeedEntry(){
 
 ///////////////////////////////////////////
 
-HashEntry::HashEntry(int taxa, int size){
+HashEntry::HashEntry(int taxa, int size, int load_multiplier){
 	this->taxa = taxa;
-	locTable = new SeedEntry * [size];
+	locTable = new SeedEntry * [size * load_multiplier];
 	for (int i=0; i<size;i++) locTable[i] = NULL;
 	this->size= size;
 }
@@ -213,8 +214,9 @@ int HashEntry::getSize() {
 HashEntry::~HashEntry() {
 	for(int i=0;i<size;i++){
 		if(locTable[i] != NULL) delete locTable[i];
-	delete[] locTable;
+	//delete[] locTable;
 	}
+	delete[] locTable;
 }
 
 
@@ -240,7 +242,7 @@ void HashMap::get(int taxa, const void * seed,node * &output) {
 	}
 }
 
-void HashMap::addTax(int taxa, int size){
+void HashMap::addTax(int taxa, int size, int load_multiplier){
 	int hash = (taxa% TABLE_SIZE);
 	while (table[hash] != NULL && table[hash]->getTaxa() != taxa){
 		hash = (hash+1)% TABLE_SIZE; // re-hash
@@ -249,7 +251,11 @@ void HashMap::addTax(int taxa, int size){
 		delete table[hash];
 		cout<<"deleting this HashEntry: "<<taxa<<endl;
 	}
+<<<<<<< HEAD
 	table[hash] = new HashEntry(taxa,2*size);
+=======
+	table[hash] = new HashEntry(taxa,size,load_multiplier);
+>>>>>>> db0604a79b1d9900c90e7075a5228d1357650bbc
 	//cout<<" HashEntry: "<<taxa<<endl;
 }
 
@@ -273,7 +279,7 @@ void HashMap::addSeed(int taxa, const void * seed,int location) {
 	}
 }
 
-void HashMap::Initialize(char * file) {
+void HashMap::Initialize(char * file, int load_multiplier) {
 	ifstream infile(file);
 	int buffer_size = 100;
 	char c;
@@ -330,8 +336,9 @@ void HashMap::Initialize(char * file) {
 HashMap::~HashMap() {
 	for(int i=0;i<TABLE_SIZE;i++){
 		if(table[i] != NULL) delete table[i];
-	delete[] table;
+	
 	}
+	delete[] table;
 }
 //
 //int main(){

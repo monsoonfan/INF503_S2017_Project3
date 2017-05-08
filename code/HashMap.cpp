@@ -332,7 +332,7 @@ void HashMap::Initialize(char * file, int load_multiplier) {
 HashMap::~HashMap() {
 	for(int i=0;i<TABLE_SIZE;i++){
 		if(table[i] != NULL) delete table[i];
-	
+	//delete[] table;
 	}
 	delete[] table;
 }

@@ -70,12 +70,16 @@
 # Seed-based searching details
 ---------------------------------------------------------
 	AlignmentAlgorithm.c
-	1.Input: 2D array  ReadTaxStarting[ nof_readseed][ nof_startings]$ 
+	1.Input: A) 2D array  ReadTaxStarting[ nof_readseed][ nof_startings]$ 
 		contains starting points of each seed (out of nof_readseed)$ 
 		of quary. nof_startings is the required columns to save this$
 		 data.
-	2.Input:MaxMM is maximum missmatch (example: 3)
-	3.seed_size: size of each seed (example: 16)
+		B)Input:MaxMM is maximum missmatch (example: 3)
+		C)seed_size: size of each seed (example: 16)
+	2.First column of ReadTaxStarting is -1 means null, i.e. no seed match$
+	 found
+	3.AlignmentRound0: Search to find first row, penalties added and if it$
+	 pass threshold then giveup.  Threshold = MaxMM*seed_size;   
   
 ---------------------------------------------------------
 # Comparison/alignment details

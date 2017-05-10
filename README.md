@@ -69,7 +69,7 @@
 ---------------------------------------------------------
 # Seed-based searching details
 ---------------------------------------------------------
-	AlignmentAlgorithm.c
+	AlignmentAlgorithm.c & AlignmentAlgorithm.h
 	1.Input: A) 2D array  ReadTaxStarting[ nof_readseed][ nof_startings]$ 
 		contains starting points of each seed (out of nof_readseed)$ 
 		of quary. nof_startings is the required columns to save this$
@@ -80,7 +80,11 @@
 	 found
 	3.AlignmentRound0: Search to find first row, penalties added and if it$
 	 pass threshold then giveup.  Threshold = MaxMM*seed_size;   
-  
+	4.AlignmentRound1: Search starts from founded seed and go into$
+	 iteration for next seed existence. Penalties are accumulated and$
+	 if pass the threshold we giveup. Otherwise if$
+	 penalties < MinThreshold = MaxMM + seed_size - 1 match found else$
+	 we pass it for NW algorithm for final decision.    
 ---------------------------------------------------------
 # Comparison/alignment details
 ---------------------------------------------------------

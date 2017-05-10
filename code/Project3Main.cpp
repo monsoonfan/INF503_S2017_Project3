@@ -7,7 +7,7 @@
 #include "FileReader.h"
 #include "HashMap.h"
 #include "NeedlemanWunsch.h"
-//#include "ReadMatchTaxIDFunc.h"
+#include "AlignmentAlgorithm.c"
 
 using namespace std;
 

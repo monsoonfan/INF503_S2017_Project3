@@ -69,7 +69,11 @@
 ---------------------------------------------------------
 # Seed-based searching details
 ---------------------------------------------------------
-
+	AlignmentAlgorithm.c
+	1.Input: 2D array  ReadTaxStarting[ nof_readseed][ nof_startings]$ 
+		contains starting points of each seed (out of nof_readseed)$ 
+		of quary. nof_startings is the required columns to save this$
+		 data.  
 ---------------------------------------------------------
 # Comparison/alignment details
 ---------------------------------------------------------

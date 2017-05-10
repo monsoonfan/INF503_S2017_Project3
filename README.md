@@ -73,7 +73,10 @@
 	1.Input: 2D array  ReadTaxStarting[ nof_readseed][ nof_startings]$ 
 		contains starting points of each seed (out of nof_readseed)$ 
 		of quary. nof_startings is the required columns to save this$
-		 data.  
+		 data.
+	2.Input:MaxMM is maximum missmatch (example: 3)
+	3.seed_size: size of each seed (example: 16)
+  
 ---------------------------------------------------------
 # Comparison/alignment details
 ---------------------------------------------------------

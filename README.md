@@ -10,7 +10,9 @@
 ---------------------------------------------------------
 # Application
 ---------------------------------------------------------
-     usage: Project3 <subject_data> <query_data> <num_bases_to_read> <output> <subject_table_size> <query_table_size> <load_factor>
+     usage:
+     %> module load gcc/6.2.0
+     %> Project3 <subject_data> <query_data> <num_bases_to_read> <output> <subject_table_size> <query_table_size> <load_factor>
      
      example: (See Makefile for example usages)
 

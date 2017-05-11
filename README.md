@@ -59,12 +59,57 @@
 # Hash Table details
 ---------------------------------------------------------
        HashTable.cpp & HashTable.h:
-       1. To initialize the Hash Table, I used the output file of CountBins.pl. I saved the txt file in /home/jc3464/INF503/INF503_S2017_Project3/docs/TableSize.txt
+       1. To initialize the Hash Table, I used the output file of CountBins.pl. I saved the txt file in  /INF503_S2017_Project3/docs/TableSize.txt
        2. The arguments of main function becomes 6 values -> the last one is the TableSize.txt file
        3. I assume that in TableSize file "449400: 10" represents "taxID:number of seeds in this ID"
        4. to add seed into a taxID entry, just use
            Map->addSeed(449400,"ACGGTAGCTGCTGAGT");
        5. I added some debug printout in the main function, comment it when you are about the implement your function
+       6. getHead function added. You can go through the Hash Table when matching seeds. By moving pointer h = h+1, you can go through the table
+       sample codes are as follow:
+       ```
+         HashMap * test_map = new HashMap;
+ 	 test_map->addTax(12345,10,1);
+ 	 // h is the first array element in the HashMap, which is NULL in this case
+ 	 HashEntry ** h = test_map->getHead();
+ 	 int counter = 0;
+	  while(counter<26500){
+  		if(*h == NULL){
+  			counter++;
+  			h++;
+  			continue;
+	  	} 
+  		cout<<"found TaxID: "<<(**h).getTaxa()<<" at location "<<counter<<endl;
+  		h=h+1;
+  		counter++;
+  	}
+	```
+	7. The HashMap::get function is designed to get the Seed location for a certain TaxID, 
+	in the following example, taxID = 12345, this taxID has 10 seeds in total, we create a Hash Table with load rate = 1.
+	The seed "ACCCATGGTGACGTAC" is the 5th seed we found in this taxID.
+	```
+	  HashMap * test_map = new HashMap;
+  	test_map->addTax(12345,10,1);
+  	// h is the first array element in the HashMap, which is NULL in this case
+  	HashEntry ** h = test_map->getHead();
+  	int counter = 0;
+  	while(counter<26500){
+  		if(*h == NULL){
+  			counter++;
+  			h++;
+  			continue;
+	  	} 
+  		cout<<"found TaxID: "<<(**h).getTaxa()<<" at location "<<counter<<endl;
+  		h=h+1;
+  		counter++;
+  	}
+  
+  	test_map->addSeed(12345,,5);
+  	node * n = new node; // create a new node as output container
+  	test_map->get(12345,"ACCCATGGTGACGTAC",n);
+  	cout<<"seed found at "<<n->location<<endl;
+  
+       
 
 ---------------------------------------------------------
 # Seed-based searching details

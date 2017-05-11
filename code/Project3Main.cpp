@@ -66,7 +66,7 @@ int main(int argc, char * argv[]) {
   query_map->Initialize(query_sizes, load_multiplier);
   fr.ReadQueries(query_file, query_data, num_queries, query_map);
   
-  // USAGE of getHead
+  // USAGE of getHead and get (to get seed location)
   
   /*
   HashMap * test_map = new HashMap;
@@ -83,6 +83,11 @@ int main(int argc, char * argv[]) {
   	h=h+1;
   	counter++;
   }
+  
+   test_map->addSeed(12345,,5);
+  node * n = new node;
+  test_map->get(12345,"ACCCATGGTGACGTAC",n);
+  cout<<"seed found at "<<n->location<<endl;
   */
   
   

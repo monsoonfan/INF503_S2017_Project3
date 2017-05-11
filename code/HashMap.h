@@ -37,6 +37,7 @@ class SeedEntry {
 		void addLocation(int);
 		void retrieve(node *&);
 		void print();
+		
 		//int listSize();
 		~SeedEntry();
 		
@@ -49,12 +50,15 @@ class HashEntry {
 	 	int size;
 	 	
 	public:
-		
 		HashEntry(int, int, int); // input: taxID, size of this taxID
+		SeedEntry** getHead(){
+			return &this->locTable[0];
+		}
 		void putSeed(int, const void *,int); // input taxID, seed string, location of this seed
 		int getTaxa();
 		void getLocations(int, const void *,node *&);
 		int getSize();
+		//void getHead(SeedEntry *&);
 		~HashEntry();
 
 };
@@ -64,10 +68,14 @@ class HashMap{
 		HashEntry **table;
 	public:
 		HashMap();
+		HashEntry** getHead(){
+			return &this->table[0];
+		}
 		void get(int, const void *,node *&); // input: taxID, seed, output pointer
 		void addTax(int,int,int); // input: taxaID, size of it
 		void addSeed(int, const void *,int); // input taxID, seed string, location of this seed
 		void Initialize(char *,int);
+		//const HashEntry getHead() const {return table[0];}
 		~HashMap();
 };
 

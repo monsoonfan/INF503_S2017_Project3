@@ -115,7 +115,6 @@ void SeedEntry::print(){
 
 }
 
-
 SeedEntry::~SeedEntry(){
     node * temp;
     node * prev = head;
@@ -140,6 +139,7 @@ HashEntry::HashEntry(int taxa, int size, int load_multiplier){
 	for (int i=0; i<size;i++) locTable[i] = NULL;
 	this->size= size;
 }
+
 
 // add seed to this taxID entry
 void HashEntry::putSeed(int taxa, const void * key,int location) {
@@ -220,6 +220,8 @@ HashEntry::~HashEntry() {
 }
 
 
+
+
 ////////////////////////////////////////////
 
 HashMap::HashMap() {
@@ -274,6 +276,11 @@ void HashMap::addSeed(int taxa, const void * seed,int location) {
 	  cout<<"AddSeed: tax ID should be initialized: " << taxa <<endl;
 	}
 }
+
+//HashEntry* HashMap::getHead(){
+//	return table[0];
+//	
+//}
 
 void HashMap::Initialize(char * file, int load_multiplier) {
 	ifstream infile(file);

@@ -7,7 +7,7 @@
 #include "FileReader.h"
 #include "HashMap.h"
 #include "NeedlemanWunsch.h"
-#include "AlignmentAlgorithm.h"
+//#include "AlignmentAlgorithm.h"
 
 using namespace std;
 
@@ -65,6 +65,26 @@ int main(int argc, char * argv[]) {
   HashMap * query_map = new HashMap;
   query_map->Initialize(query_sizes, load_multiplier);
   fr.ReadQueries(query_file, query_data, num_queries, query_map);
+  
+  // USAGE of getHead
+  
+  /*
+  HashMap * test_map = new HashMap;
+  test_map->addTax(12345,10,1);
+  HashEntry ** h = test_map->getHead();
+  int counter = 0;
+  while(counter<26500){
+  	if(*h == NULL){
+  		counter++;
+  		h++;
+  		continue;
+	  } 
+  	cout<<"found TaxID: "<<(**h).getTaxa()<<" at location "<<counter<<endl;
+  	h=h+1;
+  	counter++;
+  }
+  */
+  
   
   // Process the queries against the subjects
 

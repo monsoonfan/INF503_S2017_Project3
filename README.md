@@ -67,7 +67,7 @@
        5. I added some debug printout in the main function, comment it when you are about the implement your function
        6. getHead function added. You can go through the Hash Table when matching seeds. By moving pointer h = h+1, you can go through the table
        sample codes are as follow:
-       ```
+       --------------------------
          HashMap * test_map = new HashMap;
  	 test_map->addTax(12345,10,1);
  	 // h is the first array element in the HashMap, which is NULL in this case
@@ -83,11 +83,11 @@
   		h=h+1;
   		counter++;
   	}
-	```
+	--------------------------
 	7. The HashMap::get function is designed to get the Seed location for a certain TaxID, 
 	in the following example, taxID = 12345, this taxID has 10 seeds in total, we create a Hash Table with load rate = 1.
 	The seed "ACCCATGGTGACGTAC" is the 5th seed we found in this taxID.
-	```
+	--------------------------
 	  HashMap * test_map = new HashMap;
   	test_map->addTax(12345,10,1);
   	// h is the first array element in the HashMap, which is NULL in this case
@@ -108,7 +108,7 @@
   	node * n = new node; // create a new node as output container
   	test_map->get(12345,"ACCCATGGTGACGTAC",n);
   	cout<<"seed found at "<<n->location<<endl;
-  
+  	-------------------------
        
 
 ---------------------------------------------------------
